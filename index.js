@@ -47,7 +47,7 @@ class Group {
             numberOfTeams: 4,
             pointsPerWin: 3,
             pointsPerDraw: 1,
-            pointsPerLose: 0,
+            pointsPerLoss: 0,
             rounds: 3
         }
 
@@ -67,9 +67,9 @@ class Group {
             
             name: teamName,
             points: 0,
-            matchesWon: 0,
-            matchesDraw: 0,
-            matchesLost: 0,
+            wins: 0,
+            draws: 0,
+            lost: 0,
             goalsFor: 0,
             goalsAgainst: 0,
             goalsDiff: 0
@@ -151,33 +151,95 @@ class Group {
         
         
     }           
-
+ 
     ScoreGoals(){
-        let goals = Math.floor(Math.random()*Math.floor((Math.random()*5)));
+        let goals = Math.floor(Math.random()*Math.floor((Math.random()*6)));
         return goals;
-    }
-
+    } 
+ 
     playMatch(matchDay, match){
-
-        this.local = this.schedule[matchDay][match]['home'];
-        this.visitor = this.schedule[matchDay][match]['away'];
-        this.localGoals = this.ScoreGoals();
-        this.visitorGoals = this.ScoreGoals();
+        matchDay -= 1;
+        match -=1;
+        const local = this.schedule[matchDay][match]['home'];
+        const visitor = this.schedule[matchDay][match]['away'];
+        const localGoals = this.ScoreGoals();
+        const visitorGoals = this.ScoreGoals();
         
-        if (localGoals > visitorGoals){
+        let winner = undefined;
+        let loser = undefined;
+        let draw = false;
+
+        if (localGoals > visitorGoals){ 
+            winner = local;
+            loser = visitor;
+          
+        }
+        else if (localGoals < visitorGoals){
+            winner = visitor;
+            loser = local;
             
         }
-
+        else{
+            draw = true;
         }
+        
+        this.updateStats(local, visitor, localGoals, visitorGoals, winner);
+        const result = `${local} ${localGoals} - ${visitor} ${visitorGoals} ${winner}`;
+        return result;
 
     }
+            
+    updateStats(local, visitor, localGoals, visitorGoals, winner){
+        this.teams.forEach(team => {
+
+            if (team.name === local) {
+                
+                team.goalsFor += localGoals
+                team.goalsAgainst += visitorGoals
+                team.goalsDiff += localGoals -visitorGoals;
+                switch(winner){
+                    case local:
+                        team.wins += 1;
+                        team.points += this.config.pointsPerWin;
+                        break;
+                    case visitor:
+                        team.lost +=1;
+                        team.points += this.config.pointsPerLoss;
+                        break;
+                    default:
+                        team.draws +=1;
+                        team.points += this.config.pointsPerDraw;
+                }
+            }
+
+            if (team.name === visitor) {
+                team.goalsFor += visitorGoals;
+                team.goalsAgainst += localGoals;
+                team.goalsDiff += visitorGoals - localGoals;
+                switch(winner){
+                    case local:
+                        team.loss += 1;
+                        team.points += this.config.pointsPerLoss;
+                        break;
+                    case visitor:
+                        team.wins +=1;
+                        team.points += this.config.pointsPerWin;
+                        break;
+                    default:
+                        team.draws +=1;
+                        team.points += this.config.pointsPerDraw;
+                }
+            }
+        })    
+    }
+      
+    
            
-    showMatchDayResults(){
+  /*   showMatchDayResults(){
 
-    }
+    } */
        
 }
-
 
 
 
@@ -209,3 +271,7 @@ groupE.showGroupInfo();
 let groupF = new Group('F', teamsF);
 groupF.setupSchedule();
 groupF.showGroupInfo();
+
+console.log(groupF.playMatch(1,1));
+console.log(groupF.playMatch(1,2));
+/* console.log(groupF.teams) */
