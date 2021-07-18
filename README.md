@@ -1,2 +1,2 @@
 ### Simulacion de Eurocopa 
-## Fase de playoffs con 16 equipos
+## Desde la fase de eliminatorias hasta la final

@@ -28,17 +28,17 @@ let teamsF = randomTeams.slice(20,24);
 console.log(teamsA, '\n' , teamsB, '\n' , teamsC, '\n' , teamsD,  '\n' , teamsE,  '\n' , teamsF)
 
 
-
-
-
 class Group {
 
-    constructor(name, teams = [], config = {})
+    constructor(name, teams = [], config={})
     {
         this.name = name;
         this.schedule = [];
         this.setup(config);
         this.setupTeams(teams);
+        this.setup(config);
+        this.local = ''
+        this.visitor = ''
     }
 
     setup(config) {
@@ -48,7 +48,7 @@ class Group {
             pointsPerWin: 3,
             pointsPerDraw: 1,
             pointsPerLose: 0,
-            rounds: 1
+            rounds: 3
         }
 
         this.config = Object.assign(defaultConfig, config)
@@ -64,16 +64,22 @@ class Group {
 
     customizeTeam(teamName) {
         return {
+            
             name: teamName,
+            points: 0,
             matchesWon: 0,
             matchesDraw: 0,
-            matchesLost: 0
+            matchesLost: 0,
+            goalsFor: 0,
+            goalsAgainst: 0,
+            goalsDiff: 0
         }
     }
 
     setupSchedule() {
         this.initSchedule(); // crea la tabla con las celdas vacías (template {home: 'Home', away: 'Away'})
-        /* this.setLocalTeams(); // hace un set de cada partido.home */
+        this.setLocalTeams(); // hace un set de cada partido.home
+        this.setAwayTeams(); //PETA
     }
 
     initSchedule() {
@@ -95,11 +101,11 @@ class Group {
 
     }
 
- /*    setLocalTeams() {
+     setLocalTeams() {
         const teamNames = this.teams.map(team => team.name); // array de nombres de los equipos ['A', 'B', 'C', 'D', 'E', 'F']
         let teamIndex = 0;
         const maxHomeTeams = this.teams.length - 1 - 1; // ['A', 'B', 'C', 'D', 'E', 'F'].length === 6
-        this.matchDaySchedule.forEach(matchDay => { // para cada jornada de la liga
+        this.schedule.forEach(matchDay => { // para cada jornada de la liga
             matchDay.forEach(match => {             // para cada partido de la jornada
                 match.home = teamNames[teamIndex];
                 teamIndex++;
@@ -108,13 +114,98 @@ class Group {
                 }
             })
         })
-    } */
+    }    
 
+    setAwayTeams() {
+        const teamNames = this.teams.map(team => team.name);
+        let fourthTeam =  this.teams.length-1;
+        let index = fourthTeam;
+        for (let i = 0; i < 3; i++){
+            this.schedule[i][0]['away'] = teamNames[index];
+         }
+        for (let i = 0; i < 3; i++) {
+            this.schedule[i][1]['away'] = teamNames[--index];
+
+        }   
+           
+
+    }
+                  
+    showGroupInfo(){
+       
+        console.log(`\nGroup ${this.name}`);
+        console.log('-------');
+        const teamNames = this.teams.map(team => team.name);
+        for (const teamName of teamNames){
+            console.log(teamName);
+        }
+
+       
+        for (let i=0 ; i < this.schedule.length; i++){
+            console.log(`\nMatchday ${i+1}\n`);
+            for (let j=0; j < 2; j++){
+                console.log(`${this.schedule[i][j]['home']} vs. ${this.schedule[i][j]['away']}`);
+            }
+           
+        }
+        
+        
+    }           
+
+    ScoreGoals(){
+        let goals = Math.floor(Math.random()*Math.floor((Math.random()*5)));
+        return goals;
+    }
+
+    playMatch(matchDay, match){
+
+        this.local = this.schedule[matchDay][match]['home'];
+        this.visitor = this.schedule[matchDay][match]['away'];
+        this.localGoals = this.ScoreGoals();
+        this.visitorGoals = this.ScoreGoals();
+        
+        if (localGoals > visitorGoals){
+            
+        }
+
+        }
+
+    }
+           
+    showMatchDayResults(){
+
+    }
+       
 }
 
-let groupA = new Group('A', teamsA);
 
-console.log(groupA.teams);
-/* console.log(groupA.config); */
+
+
+let groupA = new Group('A', teamsA);    
+
+/* console.log(groupA.teams);
+console.log(groupA.config); 
 groupA.setupSchedule();
-console.log(groupA.schedule);
+console.log(groupA.schedule); */
+groupA.setupSchedule();
+groupA.showGroupInfo();
+
+let groupB = new Group('B', teamsB);
+groupB.setupSchedule();
+groupB.showGroupInfo();
+
+let groupC = new Group('C', teamsC);
+groupC.setupSchedule();
+groupC.showGroupInfo();
+
+let groupD = new Group('D', teamsD);
+groupD.setupSchedule();
+groupD.showGroupInfo();
+
+let groupE = new Group('E', teamsE);
+groupE.setupSchedule();
+groupE.showGroupInfo();
+
+let groupF = new Group('F', teamsF);
+groupF.setupSchedule();
+groupF.showGroupInfo();
