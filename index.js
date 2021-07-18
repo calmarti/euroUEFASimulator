@@ -131,7 +131,7 @@ class Group {
 
     }
                   
-    showGroupInfo(){
+    showGroupSchedule(){
        
         console.log(`\nGroup ${this.name}`);
         console.log('-------');
@@ -183,13 +183,13 @@ class Group {
             draw = true;
         }
         
-        this.updateStats(local, visitor, localGoals, visitorGoals, winner);
+        this.updateTeams(local, visitor, localGoals, visitorGoals, winner);
         const result = `${local} ${localGoals} - ${visitor} ${visitorGoals} ${winner}`;
         return result;
-
+        
     }
             
-    updateStats(local, visitor, localGoals, visitorGoals, winner){
+    updateTeams(local, visitor, localGoals, visitorGoals, winner){
         this.teams.forEach(team => {
 
             if (team.name === local) {
@@ -218,7 +218,7 @@ class Group {
                 team.goalsDiff += visitorGoals - localGoals;
                 switch(winner){
                     case local:
-                        team.loss += 1;
+                        team.lost += 1;
                         team.points += this.config.pointsPerLoss;
                         break;
                     case visitor:
@@ -232,7 +232,13 @@ class Group {
             }
         })    
     }
-      
+
+      sortTeams(){
+        this.teams.sort((teamA, teamB) => {return teamB.points - teamA.points;})
+        //TODO: AGREGAR CRITERIOS DE DESEMPATE: GOAL DIFF Y ORDEN ALFABETICO 
+        console.log(this.teams);
+      }
+
     
            
   /*   showMatchDayResults(){
@@ -241,7 +247,7 @@ class Group {
        
 }
 
-
+//MOSTRAMOS EL SCHEDULE: JORNADAS CON SUS PARTIDOS GRUPO POR GRUPO
 
 let groupA = new Group('A', teamsA);    
 
@@ -250,28 +256,35 @@ console.log(groupA.config);
 groupA.setupSchedule();
 console.log(groupA.schedule); */
 groupA.setupSchedule();
-groupA.showGroupInfo();
+groupA.showGroupSchedule();
 
 let groupB = new Group('B', teamsB);
 groupB.setupSchedule();
-groupB.showGroupInfo();
+groupB.showGroupSchedule();
 
 let groupC = new Group('C', teamsC);
 groupC.setupSchedule();
-groupC.showGroupInfo();
+groupC.showGroupSchedule();
 
 let groupD = new Group('D', teamsD);
 groupD.setupSchedule();
-groupD.showGroupInfo();
+groupD.showGroupSchedule();
 
 let groupE = new Group('E', teamsE);
 groupE.setupSchedule();
-groupE.showGroupInfo();
+groupE.showGroupSchedule();
 
 let groupF = new Group('F', teamsF);
 groupF.setupSchedule();
-groupF.showGroupInfo();
+groupF.showGroupSchedule();
+
+
+//JUGAMOS LOS PARTIDOS JORNADA A JORNADA Y TRAS ACABAR CADDA JORNADA MOSTRAMOS TABLA 
+
+//MATCHDAY 1
 
 console.log(groupF.playMatch(1,1));
 console.log(groupF.playMatch(1,2));
-/* console.log(groupF.teams) */
+groupF.sortTeams;
+/* groupF.showMatchDayResults; */
+
