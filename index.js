@@ -153,7 +153,7 @@ class Group {
     }           
  
     ScoreGoals(){
-        let goals = Math.floor(Math.random()*Math.floor((Math.random()*6)));
+        let goals = Math.floor(Math.random()*Math.floor((Math.random()*5)));
         return goals;
     } 
  
@@ -233,9 +233,27 @@ class Group {
         })    
     }
 
-      sortTeams(){
-        this.teams.sort((teamA, teamB) => {return teamB.points - teamA.points;})
-        //TODO: AGREGAR CRITERIOS DE DESEMPATE: GOAL DIFF Y ORDEN ALFABETICO 
+      sortTeams(){      //ORDENA POR PUNTOS, NO ORDENA POR GOAL DIFF DE FORMA CONSISTENTE (SOLO CUANDO LA DIFF ES POSITIVA EN AMBOS CASOS)
+        this.teams.sort((teamA, teamB) => {
+            if (teamA.points > teamB.points){
+                return teamB.points - teamA.points;
+            }
+            else if (teamA.points < teamB.points) {
+                return teamB.points - teamA.points;
+            }
+            else {
+                if (teamA.goalsDiff > teamsB.goalsDiff){
+                    return teamB.goalsDiff - teamsA.goalsDiff;
+                }
+                else if (teamA.goalsDiff < teamsB.goalsDiff){
+                    return teamB.goalsDiff - teamsA.goalsDiff;
+                }
+               /*  else{
+                    return teamB.name.toLowerCase() - teamA.name.toLowerCase();
+                }  */
+            }    
+        })
+
         console.log(this.teams);
       }
 
@@ -279,12 +297,19 @@ groupF.setupSchedule();
 groupF.showGroupSchedule();
 
 
-//JUGAMOS LOS PARTIDOS JORNADA A JORNADA Y TRAS ACABAR CADDA JORNADA MOSTRAMOS TABLA 
+//JUGAMOS LOS PARTIDOS JORNADA A JORNADA Y TRAS ACABAR CADA JORNADA MOSTRAMOS TABLA 
 
 //MATCHDAY 1
-
 console.log(groupF.playMatch(1,1));
 console.log(groupF.playMatch(1,2));
-groupF.sortTeams;
+groupF.sortTeams();
+//MATCHDAY 2
+console.log(groupF.playMatch(2,1));
+console.log(groupF.playMatch(2,2));
+groupF.sortTeams();
+//MATCHDAY 3
+console.log(groupF.playMatch(3,1));
+console.log(groupF.playMatch(3,2));
+groupF.sortTeams();
 /* groupF.showMatchDayResults; */
 
