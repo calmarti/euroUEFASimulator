@@ -233,25 +233,20 @@ class Group {
         })    
     }
 
-      sortTeams(){      //ORDENA POR PUNTOS, NO ORDENA POR GOAL DIFF DE FORMA CONSISTENTE (SOLO CUANDO LA DIFF ES POSITIVA EN AMBOS CASOS)
+      sortTeams(){      //DE MOMENTO PARECE QUE ORDENA SEGÚN LOS 3 CRITERIOS
         this.teams.sort((teamA, teamB) => {
-            if (teamA.points > teamB.points){
+            if (teamB.points !== teamA.points){
                 return teamB.points - teamA.points;
             }
-            else if (teamA.points < teamB.points) {
-                return teamB.points - teamA.points;
+            else if (teamA.goalsDiff !== teamB.goalsDiff) {
+                return teamB.goalsDiff - teamA.goalsDiff
             }
-            else {
-                if (teamA.goalsDiff > teamsB.goalsDiff){
-                    return teamB.goalsDiff - teamsA.goalsDiff;
+            else{
+                if (teamA.name < teamB.name){
+                        return -1;
+                    }
                 }
-                else if (teamA.goalsDiff < teamsB.goalsDiff){
-                    return teamB.goalsDiff - teamsA.goalsDiff;
-                }
-               /*  else{
-                    return teamB.name.toLowerCase() - teamA.name.toLowerCase();
-                }  */
-            }    
+               
         })
 
         console.log(this.teams);
