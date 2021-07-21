@@ -254,7 +254,7 @@ class Group {
 
         })
 
-        /* console.log(this.teams); */
+        console.log(this.teams);
     }
 
 
@@ -265,49 +265,71 @@ class Group {
         }
             
 
+    
+   
+
+
 }
+
+
+
+
+
+
 
 //MOSTRAMOS EL SCHEDULE: JORNADAS CON SUS PARTIDOS GRUPO POR GRUPO
 
-//OJO: ESTO DEBERIA IR ENCAPSULADO EN UNA FUNCION CREACION DE GRUPO O ASI
+
 console.log(`Groups and teams
 ============`);
 
-const groups = [];
+
+//OJO: showTournamentSchedule DEBE IMPORTARSE DESDE 'UTILS':
 
 
-let groupA = new Group('A', teamsA);
-groups.push(groupA);
-groupA.setupSchedule();
-groupA.showGroupSchedule();
 
+function showTournamentSchedule(){
 
-let groupB = new Group('B', teamsB);
-groups.push(groupB);
-groupB.setupSchedule();
-groupB.showGroupSchedule();
+    const groups = [];
+    
+    
+    let groupA = new Group('A', teamsA);
+    groups.push(groupA);
+    groupA.setupSchedule();
+    groupA.showGroupSchedule();
+    
+    
+    let groupB = new Group('B', teamsB);
+    groups.push(groupB);
+    groupB.setupSchedule();
+    groupB.showGroupSchedule();
+    
+    
+    let groupC = new Group('C', teamsC);
+    groups.push(groupC);
+    groupC.setupSchedule();
+    groupC.showGroupSchedule();
+    
+    let groupD = new Group('D', teamsD);
+    groups.push(groupD);
+    groupD.setupSchedule();
+    groupD.showGroupSchedule();
+    let groupE = new Group('E', teamsE);
+    groups.push(groupE);
+    groupE.setupSchedule();
+    groupE.showGroupSchedule();
+    
+    let groupF = new Group('F', teamsF);
+    groups.push(groupF);
+    groupF.setupSchedule();
+    groupF.showGroupSchedule();
 
+    return groups;
+    
 
-let groupC = new Group('C', teamsC);
-groups.push(groupC);
-groupC.setupSchedule();
-groupC.showGroupSchedule();
+}
 
-let groupD = new Group('D', teamsD);
-groups.push(groupD);
-groupD.setupSchedule();
-groupD.showGroupSchedule();
-
-
-let groupE = new Group('E', teamsE);
-groups.push(groupE);
-groupE.setupSchedule();
-groupE.showGroupSchedule();
-
-let groupF = new Group('F', teamsF);
-groups.push(groupF);
-groupF.setupSchedule();
-groupF.showGroupSchedule();
+const groups = showTournamentSchedule();
 
 //JUGAMOS LOS PARTIDOS JORNADA A JORNADA Y TRAS ACABAR CADA JORNADA MOSTRAMOS TABLA 
 
@@ -325,28 +347,25 @@ for (let i=0; i < tournament.matchDays; i++){    //MUESTRA EL RESULTADO DE LOS P
         
     }
     
-/*     console.log(groupB.playMatch(i,0));
-    console.log(groupB.playMatch(i,1));
-    groupB.showMatchDayResults();
-    
-    console.log(groupC.playMatch(i,0));
-    console.log(groupC.playMatch(i,1));
-    groupC.showMatchDayResults();
-    
-    console.log(groupD.playMatch(i,0));
-    console.log(groupD.playMatch(i,1));
-    groupD.showMatchDayResults();
-    
-    console.log(groupE.playMatch(i,0));
-    console.log(groupE.playMatch(i,1));
-    groupE.showMatchDayResults();
-    
-    console.log(groupF.playMatch(i,0));
-    console.log(groupF.playMatch(i,1));
-    groupF.showMatchDayResults(); */
 }
 
+//TODO Método que elige a los 4 mejores terceros
+//Array de tercerlos lugares, ordenarlos por puntos, luego por GD y luego alfabéticamente
+//TODO Array de primeros lugares de grupo 
+//TODO Array de segundos lugares de grupo vinculado a la regla de mejores terceros
+//TODO Emparejamientos aleatorios de octavos de final (restricción: no pueden cruzarse equipos del mismo grupo)
+
+//Función auxiliar que debe ir en utils (debe ejecutarse sólo después de que todos los grupos adquiaran su orden definitivo tras la liguilla) 
 
 
 
+function bestThirdPlaces(){
+    thirdPlaces = [];
+    for (group of groups){
+        thirdPlaces.push({name: group.teams[2].name, points: group.teams[2].points, goalsDiff:group.teams[2].goalsDiff}); 
+    }
+    return thirdPlaces;
+}
+
+console.log(bestThirdPlaces());
 
