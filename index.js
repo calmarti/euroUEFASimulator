@@ -1,4 +1,4 @@
-//@ts-check
+
 
 
 let teamPool = [
@@ -117,7 +117,7 @@ class Group {
         })
     }
 
-    setAwayTeams() {
+    setAwayTeams() {  //arreglar el atributo local/away de uno de los partidos
         const teamNames = this.teams.map(team => team.name);
         let fourthTeam = this.teams.length - 1;
         let index = fourthTeam;
@@ -154,7 +154,7 @@ class Group {
     }
 
     ScoreGoals() {
-        let goals = Math.floor(Math.random() * Math.floor((Math.random() * 5)));
+        const goals = Math.floor(Math.random() * Math.floor((Math.random() * 5)));
         return goals;
     }
 
@@ -185,19 +185,20 @@ class Group {
         }
 
         this.updateTeams(local, visitor, localGoals, visitorGoals, winner);
-        const result = `${local} ${localGoals} - ${visitor} ${visitorGoals} ${winner}`;
+        const result = `${local} ${localGoals} - ${visitor} ${visitorGoals} --> ${winner|| 'It\'s a draw'}`;
         return result;
 
     }
 
     updateTeams(local, visitor, localGoals, visitorGoals, winner) {
         this.teams.forEach(team => {
+           
 
             if (team.name === local) {
-
                 team.goalsFor += localGoals
                 team.goalsAgainst += visitorGoals
                 team.goalsDiff += localGoals - visitorGoals;
+
                 switch (winner) {
                     case local:
                         team.wins += 1;
@@ -256,7 +257,7 @@ class Group {
 
 
        showMatchDayResults(){
-           let columnNames = `Team\t\t Points\t    Goals For\t Goals Against\t Goals Difference\n`;
+        /*    let columnNames = `Team\t\t Points\t    Goals For\t Goals Against\t Goals Difference\n`;
            let firstPlace = `${this.teams[0].name}\t\t    ${this.teams[0].points}\t\t${this.teams[0].goalsFor}\t\t${this.teams[0].goalsAgainst}\t\t  ${this.teams[0].goalsDiff}\n`; 
            let secondPlace = `${this.teams[1].name}\t\t    ${this.teams[1].points}\t\t${this.teams[1].goalsFor}\t\t${this.teams[1].goalsAgainst}\t\t  ${this.teams[1].goalsDiff}\n`;
            let thirdPlace = `${this.teams[2].name}\t\t    ${this.teams[2].points}\t\t${this.teams[2].goalsFor}\t\t${this.teams[2].goalsAgainst}\t\t  ${this.teams[2].goalsDiff}\n`; 
@@ -266,7 +267,9 @@ class Group {
            console.log(firstPlace);
            console.log(secondPlace);
            console.log(thirdPlace);
-           console.log(fourthPlace);
+           console.log(fourthPlace); */
+
+           console.table(this.teams);
         }
             
 
