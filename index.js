@@ -7,14 +7,18 @@ let teamPool = [
     'Czech Republic', 'Denmark',
     'England', 'Finland',
     'France', 'Germany',
-    'Hungary', 'Ireland',
-    'Italy', 'Netherlands',
-    'Poland', 'Portugal',
-    'Rusia', 'Scotland',
-    'Slovakia', 'Spain',
-    'Sweeden', 'Switzerland',
-    'Turkey', 'Ukraine'
+    'Ireland','Italy', 
+    'Netherlands', 'Poland',
+    'Portugal', 'Rusia',
+    'Scotland', 'Slovakia',
+    'Spain', 'Sweeden',
+    'Switzerland','Turkey',
+    'Ukraine', 'Wales'
 ];
+
+const tournament = {
+    matchDays:3
+};
 
 
 let randomTeams = teamPool.sort(() => { return 0.5 - Math.random() });
@@ -49,7 +53,8 @@ class Group {
             pointsPerWin: 3,
             pointsPerDraw: 1,
             pointsPerLoss: 0,
-            rounds: 3
+            matchDays:3,
+            rounds: 1
         }
 
         this.config = Object.assign(defaultConfig, config)
@@ -153,18 +158,17 @@ class Group {
 
     }
 
-    ScoreGoals() {
+    scoreGoals() {
         const goals = Math.floor(Math.random() * Math.floor((Math.random() * 5)));
         return goals;
     }
 
     playMatch(matchDay, match) {
-        matchDay -= 1;
-        match -= 1;
+    
         const local = this.schedule[matchDay][match]['home'];
         const visitor = this.schedule[matchDay][match]['away'];
-        const localGoals = this.ScoreGoals();
-        const visitorGoals = this.ScoreGoals();
+        const localGoals = this.scoreGoals();
+        const visitorGoals = this.scoreGoals();
 
         let winner = undefined;
         let loser = undefined;
@@ -193,7 +197,6 @@ class Group {
     updateTeams(local, visitor, localGoals, visitorGoals, winner) {
         this.teams.forEach(team => {
            
-
             if (team.name === local) {
                 team.goalsFor += localGoals
                 team.goalsAgainst += visitorGoals
@@ -251,25 +254,14 @@ class Group {
 
         })
 
-        console.log(this.teams);
+        /* console.log(this.teams); */
     }
 
 
 
-       showMatchDayResults(){
-        /*    let columnNames = `Team\t\t Points\t    Goals For\t Goals Against\t Goals Difference\n`;
-           let firstPlace = `${this.teams[0].name}\t\t    ${this.teams[0].points}\t\t${this.teams[0].goalsFor}\t\t${this.teams[0].goalsAgainst}\t\t  ${this.teams[0].goalsDiff}\n`; 
-           let secondPlace = `${this.teams[1].name}\t\t    ${this.teams[1].points}\t\t${this.teams[1].goalsFor}\t\t${this.teams[1].goalsAgainst}\t\t  ${this.teams[1].goalsDiff}\n`;
-           let thirdPlace = `${this.teams[2].name}\t\t    ${this.teams[2].points}\t\t${this.teams[2].goalsFor}\t\t${this.teams[2].goalsAgainst}\t\t  ${this.teams[2].goalsDiff}\n`; 
-           let fourthPlace = `${this.teams[3].name}\t\t    ${this.teams[3].points}\t\t${this.teams[3].goalsFor}\t\t${this.teams[3].goalsAgainst}\t\t  ${this.teams[3].goalsDiff}\n`;  
-           
-           console.log(columnNames);
-           console.log(firstPlace);
-           console.log(secondPlace);
-           console.log(thirdPlace);
-           console.log(fourthPlace); */
-
-           console.table(this.teams);
+    showMatchDayResults(){
+        this.sortTeams();
+        console.table(this.teams);
         }
             
 
@@ -277,57 +269,84 @@ class Group {
 
 //MOSTRAMOS EL SCHEDULE: JORNADAS CON SUS PARTIDOS GRUPO POR GRUPO
 
+//OJO: ESTO DEBERIA IR ENCAPSULADO EN UNA FUNCION CREACION DE GRUPO O ASI
 console.log(`Groups and teams
 ============`);
 
+const groups = [];
+
 
 let groupA = new Group('A', teamsA);
-
-/* console.log(groupA.teams);
-console.log(groupA.config); 
-groupA.setupSchedule();
-console.log(groupA.schedule); */
+groups.push(groupA);
 groupA.setupSchedule();
 groupA.showGroupSchedule();
 
+
 let groupB = new Group('B', teamsB);
+groups.push(groupB);
 groupB.setupSchedule();
 groupB.showGroupSchedule();
 
+
 let groupC = new Group('C', teamsC);
+groups.push(groupC);
 groupC.setupSchedule();
 groupC.showGroupSchedule();
 
 let groupD = new Group('D', teamsD);
+groups.push(groupD);
 groupD.setupSchedule();
 groupD.showGroupSchedule();
 
+
 let groupE = new Group('E', teamsE);
+groups.push(groupE);
 groupE.setupSchedule();
 groupE.showGroupSchedule();
 
 let groupF = new Group('F', teamsF);
+groups.push(groupF);
 groupF.setupSchedule();
 groupF.showGroupSchedule();
 
-
 //JUGAMOS LOS PARTIDOS JORNADA A JORNADA Y TRAS ACABAR CADA JORNADA MOSTRAMOS TABLA 
+
 console.log(`================================
 ======THE EUROCUP STARTS!======\n================================\n`);
 
+for (let i=0; i < tournament.matchDays; i++){    //MUESTRA EL RESULTADO DE LOS PARTIDOS DE CADA JORNADA ORDENADOS POR GRUPO
+    
+    console.log(`=== Matchday ${i+1}===`);
+    for (group of groups){
+        console.log(`Group ${group.name}`);
+        console.log(group.playMatch(i,0));
+        console.log(group.playMatch(i,1));
+        group.showMatchDayResults();
+        
+    }
+    
+/*     console.log(groupB.playMatch(i,0));
+    console.log(groupB.playMatch(i,1));
+    groupB.showMatchDayResults();
+    
+    console.log(groupC.playMatch(i,0));
+    console.log(groupC.playMatch(i,1));
+    groupC.showMatchDayResults();
+    
+    console.log(groupD.playMatch(i,0));
+    console.log(groupD.playMatch(i,1));
+    groupD.showMatchDayResults();
+    
+    console.log(groupE.playMatch(i,0));
+    console.log(groupE.playMatch(i,1));
+    groupE.showMatchDayResults();
+    
+    console.log(groupF.playMatch(i,0));
+    console.log(groupF.playMatch(i,1));
+    groupF.showMatchDayResults(); */
+}
 
-//MATCHDAY 1
-console.log(groupF.playMatch(1, 1));
-console.log(groupF.playMatch(1, 2));
-groupF.sortTeams();
-//MATCHDAY 2
-console.log(groupF.playMatch(2, 1));
-console.log(groupF.playMatch(2, 2));
-groupF.sortTeams();
-//MATCHDAY 3
-console.log(groupF.playMatch(3, 1));
-console.log(groupF.playMatch(3, 2));
-groupF.sortTeams();
-groupF.showMatchDayResults();
-/* groupF.showMatchDayResults; */
+
+
+
 
