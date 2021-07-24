@@ -357,15 +357,44 @@ for (let i=0; i < tournament.matchDays; i++){    //MUESTRA EL RESULTADO DE LOS P
 
 //Función auxiliar que debe ir en utils (debe ejecutarse sólo después de que todos los grupos adquiaran su orden definitivo tras la liguilla) 
 
-
-
-function bestThirdPlaces(){
-    thirdPlaces = [];
+function thirdPlaces(){
+    arrThirdPlaces = [];
     for (group of groups){
-        thirdPlaces.push({name: group.teams[2].name, points: group.teams[2].points, goalsDiff:group.teams[2].goalsDiff}); 
+        arrThirdPlaces.push(group.teams[2]); 
     }
-    return thirdPlaces;
+    
+    return arrThirdPlaces;
 }
 
-console.log(bestThirdPlaces());
+
+//Función auxiliar
+function bestThirdPlaces(thirdPlaces){
+    let arrThirdPlaces =  thirdPlaces();
+    sortTeams(arrThirdPlaces);
+    let bestThirdPlaces = arrThirdPlaces.slice(0,4);
+    return bestThirdPlaces;
+}
+console.log(thirdPlaces());
+console.log(bestThirdPlaces(thirdPlaces));
+
+//Otra función auxiliar (OJO: APLICAR TAMBIÉN AL ORDENAR CADA GRUPO PARA LAS TABLAS)
+
+function sortTeams(teams) {      
+    teams.sort((teamA, teamB) => {
+        if (teamB.points !== teamA.points) {
+            return teamB.points - teamA.points;
+        }
+        else if (teamA.goalsDiff !== teamB.goalsDiff) {
+            return teamB.goalsDiff - teamA.goalsDiff
+        }
+        else {
+            if (teamA.name < teamB.name) {
+                return -1;
+                   
+            }
+        }
+
+    })
+}
+
 
