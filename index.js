@@ -98,13 +98,13 @@ for (let i=0; i < tournament.matchDays; i++){    //MUESTRA EL RESULTADO DE LOS P
 
 
 //TODO Array de segundos lugares de grupo vinculado a la regla de mejores terceros
-//TODO Emparejamientos aleatorios de octavos de final (restricción: no pueden cruzarse equipos del mismo grupo)
+//TODO Emparejamientos de octavos de final según regla establecida (restricción: no pueden cruzarse equipos del mismo grupo)
 
 //TODO Jugar los octavos de final
-//TODO Jugar los cuartos de final segun emparejamientos predeterminados
-//TODO Jugar las semis
-//TODO Jugar terer y cuarto lugar
-//TODO Jugar la final
+//TODO Emparajamiento y juego de los cuartos de final segun regla establecida
+//TODO Emparejamiento y juego de las semis segun regla establecida
+//TODO Jugar tercer y cuarto lugar 
+//TODO Jugar la final 
 //TODO Mostrar el campeón, subcampeón, tercer y cuarto lugar
 
 
@@ -119,7 +119,6 @@ let thirdPlaces = nthPlaces(groups,2);
 
 //Escoger los 4 mejores terceros de grupo
 console.log(bestThirdPlaces(groups, thirdPlaces, sortTeams));
-
 
 //Segundos de grupo
 let secondPlaces = nthPlaces(groups,1);
