@@ -1,11 +1,11 @@
 
-export const thirdPlaces = function(groups){
-    const arrThirdPlaces = [];
+export const nthPlaces = function(groups, n){
+    const listNthPlaces = [];
     for (let group of groups){
-        arrThirdPlaces.push(group.teams[2]); 
+        listNthPlaces.push(group.teams[n]); 
     }
     
-    return arrThirdPlaces;
+    return listNthPlaces;
 }
 
 export const sortTeams = function(teams) {      
@@ -27,9 +27,8 @@ export const sortTeams = function(teams) {
 }
 
 export const bestThirdPlaces = function (groups, thirdPlaces, sortTeams){
-    let arrThirdPlaces =  thirdPlaces(groups);
-    sortTeams(arrThirdPlaces);
-    let bestThirdPlaces = arrThirdPlaces.slice(0,4);
+    sortTeams(thirdPlaces);
+    let bestThirdPlaces = thirdPlaces.slice(0,4);
     return bestThirdPlaces;
 }
 

@@ -1,6 +1,6 @@
 import Group from './Group.js';
 import teamPool from './utils/teamPool.js'
-import { thirdPlaces } from './utils/aux.js';
+import { nthPlaces } from './utils/aux.js';
 import { sortTeams } from './utils/aux.js';
 import { bestThirdPlaces } from './utils/aux.js';
 
@@ -78,7 +78,7 @@ showTournamentSchedule(groups);
 
 
 
-/* console.log(`================================
+console.log(`================================
 ======THE EUROCUP STARTS!======\n================================\n`);
 
 for (let i=0; i < tournament.matchDays; i++){    //MUESTRA EL RESULTADO DE LOS PARTIDOS DE CADA JORNADA ORDENADOS POR GRUPO
@@ -93,18 +93,39 @@ for (let i=0; i < tournament.matchDays; i++){    //MUESTRA EL RESULTADO DE LOS P
         
     }
     
-} */
+} 
 
 
 
-//TODO Array de primeros lugares de grupo 
 //TODO Array de segundos lugares de grupo vinculado a la regla de mejores terceros
 //TODO Emparejamientos aleatorios de octavos de final (restricción: no pueden cruzarse equipos del mismo grupo)
 
+//TODO Jugar los octavos de final
+//TODO Jugar los cuartos de final segun emparejamientos predeterminados
+//TODO Jugar las semis
+//TODO Jugar terer y cuarto lugar
+//TODO Jugar la final
+//TODO Mostrar el campeón, subcampeón, tercer y cuarto lugar
 
-/* console.log(thirdPlaces(groups)); */
 
-//console.log(bestThirdPlaces(groups, thirdPlaces, sortTeams));
+
+
+
+//Primeros y segundos de grupos
+let firstPlaces = nthPlaces(groups,0);
+
+
+let secondPlaces = nthPlaces(groups,1);
+
+
+//Terceros de grupo
+//let thirdPlaces = nthPlaces(groups,2);
+
+//Escoger los 4 mejores terceros de grupo
+console.log(bestThirdPlaces(groups, thirdPlaces, sortTeams));
+
+
+
 
 
 
