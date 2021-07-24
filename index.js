@@ -1,5 +1,6 @@
-
-
+import { thirdPlaces } from './utils/aux.js';
+import { sortTeams } from './utils/aux.js';
+import { bestThirdPlaces } from './utils/aux.js';
 
 let teamPool = [
     'Albania', 'Austria',
@@ -238,7 +239,7 @@ class Group {
         })
     }
 
-    sortTeams() {      //DE MOMENTO PARECE QUE ORDENA SEGÚN LOS 3 CRITERIOS
+      sortTeams() {      //DE MOMENTO PARECE QUE ORDENA SEGÚN LOS 3 CRITERIOS
         this.teams.sort((teamA, teamB) => {
             if (teamB.points !== teamA.points) {
                 return teamB.points - teamA.points;
@@ -255,7 +256,7 @@ class Group {
         })
 
         console.log(this.teams);
-    }
+    } 
 
 
 
@@ -323,11 +324,12 @@ function showTournamentSchedule(){
     groups.push(groupF);
     groupF.setupSchedule();
     groupF.showGroupSchedule();
-
+    /* console.log(groups);   */
     return groups;
-    
+     
 
 }
+
 
 const groups = showTournamentSchedule();
 
@@ -339,6 +341,7 @@ console.log(`================================
 for (let i=0; i < tournament.matchDays; i++){    //MUESTRA EL RESULTADO DE LOS PARTIDOS DE CADA JORNADA ORDENADOS POR GRUPO
     
     console.log(`=== Matchday ${i+1}===`);
+
     for (group of groups){
         console.log(`Group ${group.name}`);
         console.log(group.playMatch(i,0));
@@ -349,25 +352,22 @@ for (let i=0; i < tournament.matchDays; i++){    //MUESTRA EL RESULTADO DE LOS P
     
 }
 
-//TODO Método que elige a los 4 mejores terceros
-//Array de tercerlos lugares, ordenarlos por puntos, luego por GD y luego alfabéticamente
+
+
 //TODO Array de primeros lugares de grupo 
 //TODO Array de segundos lugares de grupo vinculado a la regla de mejores terceros
 //TODO Emparejamientos aleatorios de octavos de final (restricción: no pueden cruzarse equipos del mismo grupo)
 
-//Función auxiliar que debe ir en utils (debe ejecutarse sólo después de que todos los grupos adquiaran su orden definitivo tras la liguilla) 
-
-function thirdPlaces(){
-    arrThirdPlaces = [];
-    for (group of groups){
-        arrThirdPlaces.push(group.teams[2]); 
-    }
-    
-    return arrThirdPlaces;
-}
 
 
-//Función auxiliar
+/* console.log(bestThirdPlaces(thirdPlaces, sortTeams)); */
+
+
+
+
+
+
+/* 
 function bestThirdPlaces(thirdPlaces){
     let arrThirdPlaces =  thirdPlaces();
     sortTeams(arrThirdPlaces);
@@ -396,5 +396,5 @@ function sortTeams(teams) {
 
     })
 }
-
+ */
 
