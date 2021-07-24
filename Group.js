@@ -35,8 +35,9 @@ export default class Group {
 
     customizeTeam(teamName) {
         return {
-
+            
             name: teamName,
+            group: this.name,
             points: 0,
             wins: 0,
             draws: 0,

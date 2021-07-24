@@ -111,18 +111,22 @@ for (let i=0; i < tournament.matchDays; i++){    //MUESTRA EL RESULTADO DE LOS P
 
 
 
-//Primeros y segundos de grupos
+//Primeros de grupo
 let firstPlaces = nthPlaces(groups,0);
 
-
-let secondPlaces = nthPlaces(groups,1);
-
-
 //Terceros de grupo
-//let thirdPlaces = nthPlaces(groups,2);
+let thirdPlaces = nthPlaces(groups,2);
 
 //Escoger los 4 mejores terceros de grupo
 console.log(bestThirdPlaces(groups, thirdPlaces, sortTeams));
+
+
+//Segundos de grupo
+let secondPlaces = nthPlaces(groups,1);
+
+
+
+
 
 
 
