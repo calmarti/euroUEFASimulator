@@ -1,14 +1,14 @@
 
-export const thirdPlaces = function thirdPlaces(){
-    arrThirdPlaces = [];
-    for (group of groups){
+export const thirdPlaces = function(groups){
+    const arrThirdPlaces = [];
+    for (let group of groups){
         arrThirdPlaces.push(group.teams[2]); 
     }
     
     return arrThirdPlaces;
 }
 
-export const sortTeams = function sortTeams(teams) {      
+export const sortTeams = function(teams) {      
     teams.sort((teamA, teamB) => {
         if (teamB.points !== teamA.points) {
             return teamB.points - teamA.points;
@@ -26,8 +26,8 @@ export const sortTeams = function sortTeams(teams) {
     })
 }
 
-export const bestThirdPlaces = function bestThirdPlaces(thirdPlaces, sortTeams){
-    let arrThirdPlaces =  thirdPlaces();
+export const bestThirdPlaces = function (groups, thirdPlaces, sortTeams){
+    let arrThirdPlaces =  thirdPlaces(groups);
     sortTeams(arrThirdPlaces);
     let bestThirdPlaces = arrThirdPlaces.slice(0,4);
     return bestThirdPlaces;

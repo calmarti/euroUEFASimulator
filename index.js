@@ -330,7 +330,6 @@ function showTournamentSchedule(){
 
 }
 
-
 const groups = showTournamentSchedule();
 
 //JUGAMOS LOS PARTIDOS JORNADA A JORNADA Y TRAS ACABAR CADA JORNADA MOSTRAMOS TABLA 
@@ -342,7 +341,7 @@ for (let i=0; i < tournament.matchDays; i++){    //MUESTRA EL RESULTADO DE LOS P
     
     console.log(`=== Matchday ${i+1}===`);
 
-    for (group of groups){
+    for (let group of groups){
         console.log(`Group ${group.name}`);
         console.log(group.playMatch(i,0));
         console.log(group.playMatch(i,1));
@@ -359,8 +358,8 @@ for (let i=0; i < tournament.matchDays; i++){    //MUESTRA EL RESULTADO DE LOS P
 //TODO Emparejamientos aleatorios de octavos de final (restricción: no pueden cruzarse equipos del mismo grupo)
 
 
-
-/* console.log(bestThirdPlaces(thirdPlaces, sortTeams)); */
+/* console.log(thirdPlaces(groups)); */
+console.log(bestThirdPlaces(groups, thirdPlaces, sortTeams));
 
 
 
