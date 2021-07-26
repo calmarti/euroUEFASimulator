@@ -1,3 +1,4 @@
+import { scoreGoals } from "./utils/aux.js";
 
 export default class Group {
 
@@ -124,17 +125,13 @@ export default class Group {
 
     }
 
-    scoreGoals() {
-        const goals = Math.floor(Math.random() * Math.floor((Math.random() * 5)));
-        return goals;
-    }
 
     playMatch(matchDay, match) {
     
         const local = this.schedule[matchDay][match]['home'];
         const visitor = this.schedule[matchDay][match]['away'];
-        const localGoals = this.scoreGoals();
-        const visitorGoals = this.scoreGoals();
+        const localGoals = scoreGoals();
+        const visitorGoals = scoreGoals();
 
         let winner = undefined;
         let loser = undefined;
@@ -204,7 +201,7 @@ export default class Group {
         })
     }
 
-      sortTeams() {      //DE MOMENTO PARECE QUE ORDENA SEGÚN LOS 3 CRITERIOS
+      sortTeams() {      //SUSTITUIR POR LA VERSIÓN EN AUX.JS !!!
         this.teams.sort((teamA, teamB) => {
             if (teamB.points !== teamA.points) {
                 return teamB.points - teamA.points;

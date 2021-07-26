@@ -2,8 +2,10 @@ import Group from './Group.js';
 import teamPool from './utils/teamPool.js'
 import { nthPlaces } from './utils/aux.js';
 import { sortTeams } from './utils/aux.js';
-import { bestThirdPlaces } from './utils/aux.js';
-
+import { sortAndSlice } from './utils/aux.js';
+import { inSameGroup } from './utils/aux.js';
+import { splitSecondPlaces } from './utils/aux.js';
+import { randomIndex } from './utils/aux.js';
 
 
 
@@ -97,9 +99,10 @@ for (let i=0; i < tournament.matchDays; i++){    //MUESTRA EL RESULTADO DE LOS P
 
 
 
-//TODO Array de segundos lugares de grupo vinculado a la regla de mejores terceros
-//TODO Emparejamientos de octavos de final según regla establecida (restricción: no pueden cruzarse equipos del mismo grupo)
 
+//TODO Emparejamientos de octavos de final según regla establecida (restricción: no pueden cruzarse equipos del mismo grupo)
+//Emparejamiento aleatorio: 4 primeros vs. 4 mejores terceros (NO del mismo grupo)
+//
 //TODO Jugar los octavos de final
 //TODO Emparajamiento y juego de los cuartos de final segun regla establecida
 //TODO Emparejamiento y juego de las semis segun regla establecida
@@ -118,11 +121,59 @@ let firstPlaces = nthPlaces(groups,0);
 let thirdPlaces = nthPlaces(groups,2);
 
 //Escoger los 4 mejores terceros de grupo
-console.log(bestThirdPlaces(groups, thirdPlaces, sortTeams));
+let bestThirdPlaces = sortAndSlice(groups, thirdPlaces, sortTeams);
 
 //Segundos de grupo
 let secondPlaces = nthPlaces(groups,1);
 
+//Segundos de grupo donde no se ha clasificado el tercero
+
+
+/* console.log(inSameGroup(secondPlaces[0],bestThirdPlaces)); */
+
+let secondPlacesFromNoBestThirdPlaceGroup = splitSecondPlaces('fromNoBestThirdPlaceGroup', secondPlaces, bestThirdPlaces, inSameGroup);
+let restOfSecondPlaces = splitSecondPlaces('rest', secondPlaces, bestThirdPlaces, inSameGroup);
+
+console.log(bestThirdPlaces); 
+//console.log(secondPlaces);   
+console.log(secondPlacesFromNoBestThirdPlaceGroup);
+console.log(restOfSecondPlaces);  
+
+
+//COMIENZA LA FASE DE ELIMINATORIAS!
+
+console.log('==========OCTAVOS DE FINAL==========');
+
+let roundOf16 = (firstPlaces, bestThirdPlaces, secondPlacesFromNoBestThirdPlaceGroup, restOfSecondPlaces) => {
+    while (firstPlaces!==[]) {
+        
+        let localIndex = randomIndex(firstPlaces);
+        let visitorIndex = randomIndex(bestThirdPlaces);
+        let local = firstPlaces[localIndex].name;
+        let visitor = bestThirdPlaces[visitorIndex].name;
+       
+        console.log(`Q1: ${local} vs. ${visitor}`); //LINEA TEMPORAL
+        //JUGAR EL PARTIDO Y MOSTRAR RESULTADO EN UNA SOLA LÍNEA
+        //TAL VEZ SEA NECESARIO SACAR PLAYMATCH DE GROUP O DEJARLO COMO UN MÉTODO DE UNA CLASE PADRE, O COMO UNA AUXILIAR
+        //FALTA PROBAR QUE EL SORT-TEAMS DE AUX FUNCIONA CON LOS GRUPOS (Y ASÍ ELIMINAR LA VERSIÓN DE LA CLASE GRUPO)
+    
+        firstPlaces.splice(localIndex,1);
+        bestThirdPlaces.splice(visitorIndex,1)
+    
+        console.log(local, localIndex, firstPlaces);
+    }
+    console.log(local, localIndex, firstPlaces);
+}
+
+roundOf16(firstPlaces, bestThirdPlaces);          
+    
+
+
+        
+    
+    
+
+ 
 
 
 
