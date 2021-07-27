@@ -153,6 +153,7 @@ console.log('==========OCTAVOS DE FINAL==========');
 let setRoundOf16 = function (firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestThirdPlaces, restOfSecondPlaces) {
     let localTeams = firstPlaces.concat(secondPlacesFromNoBestThirdPlaceGroup)
     /* let visitorTeams = bestThirdPlaces.concat(restOfSecondPlaces); */
+    let matches = [];
     let roundOf16 = [];
     /* console.log('Locales', localTeams); */
     //Primeros vs. mejores terceros
@@ -168,7 +169,9 @@ let setRoundOf16 = function (firstPlaces, secondPlacesFromNoBestThirdPlaceGroup,
         }
         
         console.log('Local: ' , localTeams[i], 'Visitor :' , visitor);
-        roundOf16.push(`{Q${i+1}: {${localTeams[i].name} : ${visitor.name}}`);
+        matches.push(`{Q${i+1}: {${localTeams[i].name}, ${visitor.name}}`);
+        roundOf16.push({local:`${localTeams[i].name}`, visitor:`${visitor.name}`});
+
         bestThirdPlaces.splice(index,1)       
             
         
@@ -190,16 +193,16 @@ let setRoundOf16 = function (firstPlaces, secondPlacesFromNoBestThirdPlaceGroup,
         }
 
         console.log('Local: ' , localTeams[i], 'Visitor :' , visitor);
-        roundOf16.push(`{Q${i+1}: {${localTeams[i].name} : ${visitor.name}}`);
+        matches.push(`{Q${i+1}: {${localTeams[i].name}, ${visitor.name}}`);
+        roundOf16.push({local:`${localTeams[i].name}`, visitor:`${visitor.name}`});
         restOfSecondPlaces.splice(index,1)   
     } 
     console.log(roundOf16);
+    console.log(matches);
 } 
 
 
 
-
-//CONTINUAR RECORRIENDO LOCALTEAMS DESDE i=4 o así
 
 setRoundOf16(firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestThirdPlaces, restOfSecondPlaces);
 
