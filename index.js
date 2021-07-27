@@ -89,29 +89,13 @@ for (let i = 0; i < tournament.matchDays; i++) {    //MUESTRA EL RESULTADO DE LO
 
     for (let group of groups) {
         console.log(`Group ${group.name}`);
-        console.log(group.playMatch(i, 0));
-        console.log(group.playMatch(i, 1));
+        console.log(group.playMatchDay(i, 0));
+        console.log(group.playMatchDay(i, 1));
         group.showMatchDayResults();
 
     }
 
 }
-
-
-
-
-//TODO Emparejamientos de octavos de final según regla establecida (restricción: no pueden cruzarse equipos del mismo grupo)
-//Emparejamiento aleatorio: 4 primeros vs. 4 mejores terceros (NO del mismo grupo)
-//
-//TODO Jugar los octavos de final
-//TODO Emparajamiento y juego de los cuartos de final segun regla establecida
-//TODO Emparejamiento y juego de las semis segun regla establecida
-//TODO Jugar tercer y cuarto lugar 
-//TODO Jugar la final 
-//TODO Mostrar el campeón, subcampeón, tercer y cuarto lugar
-
-
-
 
 
 //Primeros de grupo
@@ -144,11 +128,7 @@ console.log('Mejores terceros:', bestThirdPlaces);
 
 console.log('==========OCTAVOS DE FINAL==========');
 
-//CREAR ARRAY DE LOCALES: 6 PRIMEROS Y LOS 2 SEGUNDOS SIN TERCEROS 
-//CREAT ARRAY DE VISITANTES: 4 TERCEROS Y LOS 4 SEGUNDOS RESTANTES
-//RECORRER EL ARRAY DE LOCALES EN ORDEN
-//PRIMEROS 4 LOOPS ESCOGER ALEATORIAMENTE DE LOS TERCEROS
-//LOOPS 5 - 8 ESCOGER ALEATORIAMENTE DEL RESTO DE LOS SEGUNDOS
+
 
 let setRoundOf16 = function (firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestThirdPlaces, restOfSecondPlaces) {
     let localTeams = firstPlaces.concat(secondPlacesFromNoBestThirdPlaceGroup)
@@ -161,8 +141,8 @@ let setRoundOf16 = function (firstPlaces, secondPlacesFromNoBestThirdPlaceGroup,
         let index = randomIndex(bestThirdPlaces);
         let visitor = bestThirdPlaces[index];
         
-        while (visitor.group === localTeams[i].group || bestThirdPlaces.includes(visitor) === false)   
-
+        while (visitor.group === localTeams[i].group  /* || bestThirdPlaces.includes(visitor) === false */)   
+        
         {
             index = randomIndex(bestThirdPlaces);
             visitor = bestThirdPlaces[index];
@@ -171,27 +151,27 @@ let setRoundOf16 = function (firstPlaces, secondPlacesFromNoBestThirdPlaceGroup,
         console.log('Local: ' , localTeams[i], 'Visitor :' , visitor);
         matches.push(`{Q${i+1}: {${localTeams[i].name}, ${visitor.name}}`);
         roundOf16.push({local:`${localTeams[i].name}`, visitor:`${visitor.name}`});
-
-        bestThirdPlaces.splice(index,1)       
-            
         
-       
-
+        bestThirdPlaces.splice(index,1)       
+        
+        
+        
+        
     }
     console.log(roundOf16);
-
+    
     //Primeros y segundos de grupos sin terceros clasificados vs. resto de segundos
-     for (let i = 4; i < localTeams.length; i++) {
+    for (let i = 4; i < localTeams.length; i++) {
         let index = randomIndex(restOfSecondPlaces);
         let visitor = restOfSecondPlaces[index];
-
-        while (visitor.group === localTeams[i].group || restOfSecondPlaces.includes(visitor) === false)  
-
+        
+        while (visitor.group === localTeams[i].group /* || restOfSecondPlaces.includes(visitor) === false */)  
+        
         {
             index = randomIndex(restOfSecondPlaces);
             visitor = restOfSecondPlaces[index];
         }
-
+        
         console.log('Local: ' , localTeams[i], 'Visitor :' , visitor);
         matches.push(`{Q${i+1}: {${localTeams[i].name}, ${visitor.name}}`);
         roundOf16.push({local:`${localTeams[i].name}`, visitor:`${visitor.name}`});
@@ -202,16 +182,24 @@ let setRoundOf16 = function (firstPlaces, secondPlacesFromNoBestThirdPlaceGroup,
 } 
 
 
-
-
 setRoundOf16(firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestThirdPlaces, restOfSecondPlaces);
 
 
-//TODO SACAR PLAYMATCH DE GROUP Y PONERLO EN INDEX, O BIEN PONERLO COMO UN MÉTODO DE UNA CLASE PADRE, O COMO UNA AUXILIAR
-//TODO JUGAR EL PARTIDO Y MOSTRAR RESULTADO EN UNA SOLA LÍNEA
-    
 
-  
+
+
+//TODO JUGAR EL PARTIDO Y MOSTRAR RESULTADO EN UNA SOLA LÍNEA
+
+//TODO Jugar los octavos de final
+//TODO Emparajamiento y juego de los cuartos de final segun regla establecida
+//TODO Emparejamiento y juego de las semis segun regla establecida
+//TODO Jugar tercer y cuarto lugar 
+//TODO Jugar la final 
+//TODO Mostrar el campeón, subcampeón, tercer y cuarto lugar
+
+
+
+
 
 
 

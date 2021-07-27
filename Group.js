@@ -1,4 +1,5 @@
 import { scoreGoals } from "./utils/aux.js";
+import { playMatch } from "./utils/aux.js";
 
 export default class Group {
 
@@ -89,7 +90,7 @@ export default class Group {
         })
     }
 
-    setAwayTeams() {  //arreglar el atributo local/away de uno de los partidos
+    setAwayTeams() {  //TODO Arreglar el atributo local/away de uno de los partidos
         const teamNames = this.teams.map(team => team.name);
         let fourthTeam = this.teams.length - 1;
         let index = fourthTeam;
@@ -126,14 +127,17 @@ export default class Group {
     }
 
 
-    playMatch(matchDay, match) {
+    playMatchDay(matchDay, match) {
     
         const local = this.schedule[matchDay][match]['home'];
         const visitor = this.schedule[matchDay][match]['away'];
+        
         const localGoals = scoreGoals();
         const visitorGoals = scoreGoals();
+        
+        const winner = playMatch(local, visitor, localGoals, visitorGoals, false);
 
-        let winner = undefined;
+        /*        let winner = undefined;
         let loser = undefined;
         let draw = false;
 
@@ -149,10 +153,10 @@ export default class Group {
         }
         else {
             draw = true;
-        }
+        } */
 
         this.updateTeams(local, visitor, localGoals, visitorGoals, winner);
-        const result = `${local} ${localGoals} - ${visitor} ${visitorGoals} --> ${winner|| 'It\'s a draw'}`;
+        const result = `${local} ${localGoals} - ${visitor} ${visitorGoals} --> ${winner || 'It\'s a draw'}`;
         return result;
 
     }

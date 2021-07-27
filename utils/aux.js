@@ -80,6 +80,35 @@ export const randomIndex = function(array){
 }
 
 
+export const playMatch = function(local, visitor, scoreGoals, localGoals, visitorGoals, playoff=false) {
+    
+        let winner = undefined;
+        let loser = undefined;
+        let draw = false;
+
+        if (localGoals > visitorGoals) {
+            return winner = local;
+            /* loser = visitor; */
+
+        }
+        else if (localGoals < visitorGoals) {
+            return winner = visitor;
+            /* loser = local; */
+
+        }
+        else {
+            if (playoff==false) {
+                return draw = true;
+            }
+            else if (playoff==true){
+                let localGoals = scoreGoals();
+                let visitorGoals = scoreGoals();
+                playMatch(local, localGoals, visitor, visitorGoals, true);
+            }
+                
+        }
+
+}
 
 
 
