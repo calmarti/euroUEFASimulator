@@ -201,7 +201,9 @@ export default class Group {
         })
     }
 
-      sortTeams() {      //SUSTITUIR POR LA VERSIÓN EN AUX.JS !!!
+ 
+      
+    sortTeams() {      //TODO PROBAR VERSIÓN SORT-TEAMS EN AUX.JS Y SI FUNCIONA ELIMINAR ESTA!
         this.teams.sort((teamA, teamB) => {
             if (teamB.points !== teamA.points) {
                 return teamB.points - teamA.points;

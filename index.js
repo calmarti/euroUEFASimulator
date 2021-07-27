@@ -10,7 +10,7 @@ import { randomIndex } from './utils/aux.js';
 
 
 const tournament = {
-    matchDays:3
+    matchDays: 3
 };
 
 
@@ -39,7 +39,7 @@ console.log(`Groups and teams
 function createGroups() {
 
     const groups = [];
-    
+
     let groupA = new Group('A', teamsA);
     groups.push(groupA);
     let groupB = new Group('B', teamsB);
@@ -61,11 +61,11 @@ let groups = createGroups();
 /* console.log(groups); */
 
 
- function showTournamentSchedule(groups){
+function showTournamentSchedule(groups) {
 
-    for (let group of groups){
+    for (let group of groups) {
         group.setupSchedule();
-        group.showGroupSchedule();     
+        group.showGroupSchedule();
     }
 
 }
@@ -83,19 +83,19 @@ showTournamentSchedule(groups);
 console.log(`================================
 ======THE EUROCUP STARTS!======\n================================\n`);
 
-for (let i=0; i < tournament.matchDays; i++){    //MUESTRA EL RESULTADO DE LOS PARTIDOS DE CADA JORNADA ORDENADOS POR GRUPO
-    
-    console.log(`=== Matchday ${i+1}===`);
+for (let i = 0; i < tournament.matchDays; i++) {    //MUESTRA EL RESULTADO DE LOS PARTIDOS DE CADA JORNADA ORDENADOS POR GRUPO
 
-    for (let group of groups){
+    console.log(`=== Matchday ${i + 1}===`);
+
+    for (let group of groups) {
         console.log(`Group ${group.name}`);
-        console.log(group.playMatch(i,0));
-        console.log(group.playMatch(i,1));
+        console.log(group.playMatch(i, 0));
+        console.log(group.playMatch(i, 1));
         group.showMatchDayResults();
-        
+
     }
-    
-} 
+
+}
 
 
 
@@ -115,16 +115,16 @@ for (let i=0; i < tournament.matchDays; i++){    //MUESTRA EL RESULTADO DE LOS P
 
 
 //Primeros de grupo
-let firstPlaces = nthPlaces(groups,0);
-
+let firstPlaces = nthPlaces(groups, 0);
+console.log('Primeros', firstPlaces)
 //Terceros de grupo
-let thirdPlaces = nthPlaces(groups,2);
+let thirdPlaces = nthPlaces(groups, 2);
 
 //Escoger los 4 mejores terceros de grupo
 let bestThirdPlaces = sortAndSlice(groups, thirdPlaces, sortTeams);
 
 //Segundos de grupo
-let secondPlaces = nthPlaces(groups,1);
+let secondPlaces = nthPlaces(groups, 1);
 
 //Segundos de grupo donde no se ha clasificado el tercero
 
@@ -134,46 +134,89 @@ let secondPlaces = nthPlaces(groups,1);
 let secondPlacesFromNoBestThirdPlaceGroup = splitSecondPlaces('fromNoBestThirdPlaceGroup', secondPlaces, bestThirdPlaces, inSameGroup);
 let restOfSecondPlaces = splitSecondPlaces('rest', secondPlaces, bestThirdPlaces, inSameGroup);
 
-console.log(bestThirdPlaces); 
+console.log('Mejores terceros:', bestThirdPlaces);
 //console.log(secondPlaces);   
-console.log(secondPlacesFromNoBestThirdPlaceGroup);
-console.log(restOfSecondPlaces);  
+//console.log(secondPlacesFromNoBestThirdPlaceGroup);
+//console.log(restOfSecondPlaces);  
 
 
 //COMIENZA LA FASE DE ELIMINATORIAS!
 
 console.log('==========OCTAVOS DE FINAL==========');
 
-let roundOf16 = (firstPlaces, bestThirdPlaces, secondPlacesFromNoBestThirdPlaceGroup, restOfSecondPlaces) => {
-    while (firstPlaces!==[]) {
+//CREAR ARRAY DE LOCALES: 6 PRIMEROS Y LOS 2 SEGUNDOS SIN TERCEROS 
+//CREAT ARRAY DE VISITANTES: 4 TERCEROS Y LOS 4 SEGUNDOS RESTANTES
+//RECORRER EL ARRAY DE LOCALES EN ORDEN
+//PRIMEROS 4 LOOPS ESCOGER ALEATORIAMENTE DE LOS TERCEROS
+//LOOPS 5 - 8 ESCOGER ALEATORIAMENTE DEL RESTO DE LOS SEGUNDOS
+
+let setRoundOf16 = function (firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestThirdPlaces, restOfSecondPlaces) {
+    let localTeams = firstPlaces.concat(secondPlacesFromNoBestThirdPlaceGroup)
+    /* let visitorTeams = bestThirdPlaces.concat(restOfSecondPlaces); */
+    let roundOf16 = [];
+    /* console.log('Locales', localTeams); */
+    //Primeros vs. mejores terceros
+    for (let i = 0; i < localTeams.length - 4; i++) {
+        let index = randomIndex(bestThirdPlaces);
+        let visitor = bestThirdPlaces[index];
         
-        let localIndex = randomIndex(firstPlaces);
-        let visitorIndex = randomIndex(bestThirdPlaces);
-        let local = firstPlaces[localIndex].name;
-        let visitor = bestThirdPlaces[visitorIndex].name;
+        while (visitor.group === localTeams[i].group || bestThirdPlaces.includes(visitor) === false)   
+
+        {
+            index = randomIndex(bestThirdPlaces);
+            visitor = bestThirdPlaces[index];
+        }
+        
+        console.log('Local: ' , localTeams[i], 'Visitor :' , visitor);
+        roundOf16.push(`{Q${i+1}: {${localTeams[i].name} : ${visitor.name}}`);
+        bestThirdPlaces.splice(index,1)       
+            
+        
        
-        console.log(`Q1: ${local} vs. ${visitor}`); //LINEA TEMPORAL
-        //JUGAR EL PARTIDO Y MOSTRAR RESULTADO EN UNA SOLA LÍNEA
-        //TAL VEZ SEA NECESARIO SACAR PLAYMATCH DE GROUP O DEJARLO COMO UN MÉTODO DE UNA CLASE PADRE, O COMO UNA AUXILIAR
-        //FALTA PROBAR QUE EL SORT-TEAMS DE AUX FUNCIONA CON LOS GRUPOS (Y ASÍ ELIMINAR LA VERSIÓN DE LA CLASE GRUPO)
-    
-        firstPlaces.splice(localIndex,1);
-        bestThirdPlaces.splice(visitorIndex,1)
-    
-        console.log(local, localIndex, firstPlaces);
+
     }
-    console.log(local, localIndex, firstPlaces);
-}
+    console.log(roundOf16);
 
-roundOf16(firstPlaces, bestThirdPlaces);          
+    //Primeros y segundos de grupos sin terceros clasificados vs. resto de segundos
+     for (let i = 4; i < localTeams.length; i++) {
+        let index = randomIndex(restOfSecondPlaces);
+        let visitor = restOfSecondPlaces[index];
+
+        while (visitor.group === localTeams[i].group || restOfSecondPlaces.includes(visitor) === false)  
+
+        {
+            index = randomIndex(restOfSecondPlaces);
+            visitor = restOfSecondPlaces[index];
+        }
+
+        console.log('Local: ' , localTeams[i], 'Visitor :' , visitor);
+        roundOf16.push(`{Q${i+1}: {${localTeams[i].name} : ${visitor.name}}`);
+        restOfSecondPlaces.splice(index,1)   
+    } 
+    console.log(roundOf16);
+} 
+
+
+
+
+//CONTINUAR RECORRIENDO LOCALTEAMS DESDE i=4 o así
+
+setRoundOf16(firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestThirdPlaces, restOfSecondPlaces);
+
+
+//TODO SACAR PLAYMATCH DE GROUP Y PONERLO EN INDEX, O BIEN PONERLO COMO UN MÉTODO DE UNA CLASE PADRE, O COMO UNA AUXILIAR
+//TODO JUGAR EL PARTIDO Y MOSTRAR RESULTADO EN UNA SOLA LÍNEA
     
 
+  
 
-        
-    
-    
 
- 
+
+
+
+
+
+
 
 
 
