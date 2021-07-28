@@ -184,43 +184,73 @@ function setRoundOf16(firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestTh
 
 
 const roundOf16 = setRoundOf16(firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestThirdPlaces, restOfSecondPlaces);
-let i = 1;
-let winners = [];
+/* let i = 1; */
+let roundOf16Winners = [];
 
-roundOf16.forEach((match) => {
+roundOf16.forEach((match,i) => {
         
         let localGoals = scoreGoals();
         let visitorGoals = scoreGoals();
 
-        let winner = playMatch(match.local, match.visitor, localGoals, visitorGoals);
-        console.log(`Q${i}: ${match.local} ${localGoals}  -  ${visitorGoals} ${match.visitor} ==> ${winner || 'No winner yet!'}`);
+        let roundOf16Winner  = playMatch(match.local, match.visitor, localGoals, visitorGoals);
+        console.log(`Q${i+1}: ${match.local} ${localGoals}  -  ${visitorGoals} ${match.visitor} ==> ${roundOf16Winner  || 'No winner yet!'}`);
      
-        while (winner === undefined){
+        while (roundOf16Winner  === undefined){
             console.log('A rematch will be played!');
             localGoals = scoreGoals();
             visitorGoals = scoreGoals();
-            winner = playMatch(match.local, match.visitor, localGoals, visitorGoals);
-            console.log(`Q${i}: ${match.local} ${localGoals}  -  ${visitorGoals} ${match.visitor} ==> ${winner || 'No winner yet!'}`);
+            roundOf16Winner = playMatch(match.local, match.visitor, localGoals, visitorGoals);
+            console.log(`Q${i+1}: ${match.local} ${localGoals}  -  ${visitorGoals} ${match.visitor} ==> ${roundOf16Winner  || 'No winner yet!'}`);
               
         }
 
-        winners.push(winner); 
-        i++;
+        roundOf16Winners.push(roundOf16Winner); 
+        
 })
 
-console.log(winners);
+console.log(roundOf16Winners);
 
 
 console.log('==========QUARTER-FINALS==========');
 
+//Q1 - Q8
+//Q2 - Q7
+//Q3 - Q6
+//Q4 - Q5
+
+
+ function quarterFinals(roundOf16Winners){
+   let quarterFinalsWinners = [];
+    for (let i=0; i < roundOf16Winners.length/2; i++) {
+
+        let localGoals = scoreGoals();
+        let visitorGoals = scoreGoals();
+        let local = roundOf16Winners[i]
+        let visitor = roundOf16Winners[roundOf16Winners.length-(i+1)];
+        let quarterFinalWinner = playMatch(local,visitor, localGoals, visitorGoals);
+        console.log(`Q${i+1}: ${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${quarterFinalWinner  || 'No winner yet!'}`); 
+        while (quarterFinalWinner  === undefined){
+            console.log('A rematch will be played!');
+            localGoals = scoreGoals();
+            visitorGoals = scoreGoals();
+            quarterFinalWinner = playMatch(local,visitor, localGoals, visitorGoals);
+            console.log(`Q${i+1}: ${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${quarterFinalWinner  || 'No winner yet!'}`);
+        }
+    } 
+}
+
+quarterFinals(roundOf16Winners);
+
+console.log('==========SEMIFINALS==========');
 
 
 
+/* const quarterFinalsSchedule = [`${winners[0]}----                           ----${winners[6]}`,
+                               `             |----                      ----|                `,    
+    ]; */
 
 
-
-
-
+/* console.log(quarterFinalsSchedule); */
 
 
 //TODO Emparajamiento y juego de los cuartos de final segun regla establecida
@@ -228,25 +258,4 @@ console.log('==========QUARTER-FINALS==========');
 //TODO Jugar tercer y cuarto lugar 
 //TODO Jugar la final 
 //TODO Mostrar el campeón, subcampeón, tercer y cuarto lugar
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
