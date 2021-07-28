@@ -105,11 +105,10 @@ export const playMatch = function(local, visitor, scoreGoals, localGoals, visito
                 let visitorGoals = scoreGoals();
                 playMatch(local, localGoals, visitor, visitorGoals, true);
             }
-                
         }
-
 }
-
+        
+        
 
 
 

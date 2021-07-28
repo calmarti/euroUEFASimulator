@@ -130,7 +130,7 @@ console.log('==========OCTAVOS DE FINAL==========');
 
 
 
-let setRoundOf16 = function (firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestThirdPlaces, restOfSecondPlaces) {
+function setRoundOf16(firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestThirdPlaces, restOfSecondPlaces) {
     let localTeams = firstPlaces.concat(secondPlacesFromNoBestThirdPlaceGroup)
     /* let visitorTeams = bestThirdPlaces.concat(restOfSecondPlaces); */
     let matches = [];
@@ -141,7 +141,7 @@ let setRoundOf16 = function (firstPlaces, secondPlacesFromNoBestThirdPlaceGroup,
         let index = randomIndex(bestThirdPlaces);
         let visitor = bestThirdPlaces[index];
         
-        while (visitor.group === localTeams[i].group  /* || bestThirdPlaces.includes(visitor) === false */)   
+        while (visitor.group === localTeams[i].group  /* || bestThirdPlaces.includes(visitor) === false */)   //TODO Arreglar bug de while loop
         
         {
             index = randomIndex(bestThirdPlaces);
@@ -165,7 +165,7 @@ let setRoundOf16 = function (firstPlaces, secondPlacesFromNoBestThirdPlaceGroup,
         let index = randomIndex(restOfSecondPlaces);
         let visitor = restOfSecondPlaces[index];
         
-        while (visitor.group === localTeams[i].group /* || restOfSecondPlaces.includes(visitor) === false */)  
+        while (visitor.group === localTeams[i].group /* || restOfSecondPlaces.includes(visitor) === false */)  //TODO Arreglar bug de while loop
         
         {
             index = randomIndex(restOfSecondPlaces);
