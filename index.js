@@ -6,7 +6,8 @@ import { sortAndSlice } from './utils/aux.js';
 import { inSameGroup } from './utils/aux.js';
 import { splitSecondPlaces } from './utils/aux.js';
 import { randomIndex } from './utils/aux.js';
-
+import { scoreGoals } from './utils/aux.js';
+import { playMatch } from './utils/aux.js';
 
 
 const tournament = {
@@ -126,7 +127,7 @@ console.log('Mejores terceros:', bestThirdPlaces);
 
 //COMIENZA LA FASE DE ELIMINATORIAS!
 
-console.log('==========OCTAVOS DE FINAL==========');
+console.log('==========ROUND OF SIXTEEN==========');
 
 
 
@@ -140,57 +141,88 @@ function setRoundOf16(firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestTh
     for (let i = 0; i < localTeams.length - 4; i++) {
         let index = randomIndex(bestThirdPlaces);
         let visitor = bestThirdPlaces[index];
-        
+
         while (visitor.group === localTeams[i].group  /* || bestThirdPlaces.includes(visitor) === false */)   //TODO Arreglar bug de while loop
-        
+
         {
             index = randomIndex(bestThirdPlaces);
             visitor = bestThirdPlaces[index];
         }
-        
-        console.log('Local: ' , localTeams[i], 'Visitor :' , visitor);
-        matches.push(`{Q${i+1}: {${localTeams[i].name}, ${visitor.name}}`);
-        roundOf16.push({local:`${localTeams[i].name}`, visitor:`${visitor.name}`});
-        
-        bestThirdPlaces.splice(index,1)       
-        
-        
-        
-        
+
+        /* console.log('Local: ' , localTeams[i], 'Visitor :' , visitor); */
+        matches.push(`{Q${i + 1}: {${localTeams[i].name}, ${visitor.name}}`);
+        roundOf16.push({ local: `${localTeams[i].name}`, visitor: `${visitor.name}` });
+
+        bestThirdPlaces.splice(index, 1)
+
     }
+
     console.log(roundOf16);
-    
+
     //Primeros y segundos de grupos sin terceros clasificados vs. resto de segundos
     for (let i = 4; i < localTeams.length; i++) {
         let index = randomIndex(restOfSecondPlaces);
         let visitor = restOfSecondPlaces[index];
-        
+
         while (visitor.group === localTeams[i].group /* || restOfSecondPlaces.includes(visitor) === false */)  //TODO Arreglar bug de while loop
-        
+
         {
             index = randomIndex(restOfSecondPlaces);
             visitor = restOfSecondPlaces[index];
         }
-        
-        console.log('Local: ' , localTeams[i], 'Visitor :' , visitor);
-        matches.push(`{Q${i+1}: {${localTeams[i].name}, ${visitor.name}}`);
-        roundOf16.push({local:`${localTeams[i].name}`, visitor:`${visitor.name}`});
-        restOfSecondPlaces.splice(index,1)   
-    } 
+
+        /*  console.log('Local: ' , localTeams[i], 'Visitor :' , visitor); */
+        matches.push(`{Q${i + 1}: {${localTeams[i].name}, ${visitor.name}}`);
+        roundOf16.push({ local: `${localTeams[i].name}`, visitor: `${visitor.name}` });
+        restOfSecondPlaces.splice(index, 1)
+    }
     console.log(roundOf16);
     console.log(matches);
-} 
+
+    return roundOf16;
+}
 
 
-setRoundOf16(firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestThirdPlaces, restOfSecondPlaces);
+const roundOf16 = setRoundOf16(firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestThirdPlaces, restOfSecondPlaces);
+let i = 1;
+let winners = [];
+
+roundOf16.forEach((match) => {
+        
+        let localGoals = scoreGoals();
+        let visitorGoals = scoreGoals();
+
+        let winner = playMatch(match.local, match.visitor, localGoals, visitorGoals);
+        console.log(`Q${i}: ${match.local} ${localGoals}  -  ${visitorGoals} ${match.visitor} ==> ${winner || 'No winner yet!'}`);
+     
+        while (winner === undefined){
+            console.log('A rematch will be played!');
+            localGoals = scoreGoals();
+            visitorGoals = scoreGoals();
+            winner = playMatch(match.local, match.visitor, localGoals, visitorGoals);
+            console.log(`Q${i}: ${match.local} ${localGoals}  -  ${visitorGoals} ${match.visitor} ==> ${winner || 'No winner yet!'}`);
+              
+        }
+
+        winners.push(winner); 
+        i++;
+})
+
+console.log(winners);
+
+
+console.log('==========QUARTER-FINALS==========');
 
 
 
 
 
-//TODO JUGAR EL PARTIDO Y MOSTRAR RESULTADO EN UNA SOLA LÍNEA
 
-//TODO Jugar los octavos de final
+
+
+
+
+
 //TODO Emparajamiento y juego de los cuartos de final segun regla establecida
 //TODO Emparejamiento y juego de las semis segun regla establecida
 //TODO Jugar tercer y cuarto lugar 

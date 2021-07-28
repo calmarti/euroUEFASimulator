@@ -135,7 +135,7 @@ export default class Group {
         const localGoals = scoreGoals();
         const visitorGoals = scoreGoals();
         
-        const winner = playMatch(local, visitor, localGoals, visitorGoals, false);
+        const winner = playMatch(local, visitor, localGoals, visitorGoals);
 
         /*        let winner = undefined;
         let loser = undefined;

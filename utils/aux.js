@@ -1,5 +1,5 @@
-export const scoreGoals = function() {
-    const goals = Math.floor(Math.random() * Math.floor((Math.random() * 5)));
+export const scoreGoals = function () {
+    const goals = Math.floor(Math.random() * Math.floor((Math.random() * 8)));
     return goals;
 }
 
@@ -75,40 +75,40 @@ export const splitSecondPlaces = function (slice, arrayA, arrayB, inSameGroup) {
 }
 
 
-export const randomIndex = function(array){
-    return Math.floor(Math.random()*(array.length));
+export const randomIndex = function (array) {
+    return Math.floor(Math.random() * (array.length));
 }
 
 
-export const playMatch = function(local, visitor, scoreGoals, localGoals, visitorGoals, playoff=false) {
-    
-        let winner = undefined;
-        let loser = undefined;
-        let draw = false;
+export const playMatch = function (local, visitor, localGoals, visitorGoals) {
 
-        if (localGoals > visitorGoals) {
-            return winner = local;
-            /* loser = visitor; */
+    let winner = undefined;
+    let loser = undefined;
+    let draw = false;
 
-        }
-        else if (localGoals < visitorGoals) {
-            return winner = visitor;
-            /* loser = local; */
 
-        }
-        else {
-            if (playoff==false) {
-                return draw = true;
-            }
-            else if (playoff==true){
-                let localGoals = scoreGoals();
-                let visitorGoals = scoreGoals();
-                playMatch(local, localGoals, visitor, visitorGoals, true);
-            }
-        }
+    if (localGoals > visitorGoals) {
+        return winner = local;
+
+        /* loser = visitor; */
+
+    }
+    else if (localGoals < visitorGoals) {
+        return winner = visitor;
+
+        /* loser = local; */
+
+    }
+    else {
+       
+        return winner;
+       
+    }
 }
-        
-        
+
+
+
+
 
 
 
