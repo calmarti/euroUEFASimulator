@@ -1,6 +1,33 @@
 export const scoreGoals = function () {
-    const goals = Math.floor(Math.random() * Math.floor((Math.random() * 8)));
+    const goals = Math.floor(Math.random() * 5);
     return goals;
+    
+}
+
+export const playMatch = function (local, visitor, localGoals, visitorGoals) {
+
+    let winner = undefined;
+    let loser = undefined;
+    let draw = false;
+
+
+    if (localGoals > visitorGoals) {
+        return winner = local;
+
+        /* loser = visitor; */
+
+    }
+    else if (localGoals < visitorGoals) {
+        return winner = visitor;
+
+        /* loser = local; */
+
+    }
+    else {
+       
+        return winner;
+       
+    }
 }
 
 export const nthPlaces = function (groups, n) {
@@ -79,32 +106,6 @@ export const randomIndex = function (array) {
     return Math.floor(Math.random() * (array.length));
 }
 
-
-export const playMatch = function (local, visitor, localGoals, visitorGoals) {
-
-    let winner = undefined;
-    let loser = undefined;
-    let draw = false;
-
-
-    if (localGoals > visitorGoals) {
-        return winner = local;
-
-        /* loser = visitor; */
-
-    }
-    else if (localGoals < visitorGoals) {
-        return winner = visitor;
-
-        /* loser = local; */
-
-    }
-    else {
-       
-        return winner;
-       
-    }
-}
 
 
 
