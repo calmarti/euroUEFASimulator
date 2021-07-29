@@ -30,6 +30,29 @@ export const playMatch = function (local, visitor, localGoals, visitorGoals) {
     }
 }
 
+
+export const playRound = function(arrayOfMatches,matchId){  //TODO: PONER LOS 'Q' DE DONDE PROVIENE CADA EQUIPO (DE OCTAVOS) Y NO UN 'Q' NUEVO
+    const roundWinners= [];
+    for (let i=0; i < arrayOfMatches.length; i++){
+        const local = arrayOfMatches[i].local;
+        const visitor = arrayOfMatches[i].visitor;
+        let localGoals = scoreGoals();
+        let visitorGoals = scoreGoals();
+        let roundWinner = playMatch(local, visitor, localGoals, visitorGoals);
+        console.log(`${matchId}${i+1}: ${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${roundWinner  || 'No winner yet!'}`); 
+
+        while (roundWinner ===undefined){
+            console.log('A rematch will be played!');
+            localGoals = scoreGoals();
+            visitorGoals = scoreGoals();
+            roundWinner = playMatch(local,visitor, localGoals, visitorGoals);
+            console.log(`${matchId}${i+1}: ${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${roundWinner  || 'No winner yet!'}`); 
+        }
+        roundWinners.push(roundWinner);
+    }
+    return roundWinners;
+}
+
 export const nthPlaces = function (groups, n) {
     const listNthPlaces = [];
     for (let group of groups) {

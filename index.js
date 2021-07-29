@@ -8,6 +8,7 @@ import { splitSecondPlaces } from './utils/aux.js';
 import { randomIndex } from './utils/aux.js';
 import { scoreGoals } from './utils/aux.js';
 import { playMatch } from './utils/aux.js';
+import { playRound } from './utils/aux.js';
 
 
 const tournament = {
@@ -16,15 +17,15 @@ const tournament = {
 
 
 //DISTRIBUYE ALEATORIAMENTE LOS EQUIPOS POR GRUPO
-let randomTeams = teamPool.sort(() => { return 0.5 - Math.random() });
+const randomTeams = teamPool.sort(() => { return 0.5 - Math.random() });
 /* console.log(randomTeams); */
 
-let teamsA = randomTeams.slice(0, 4);
-let teamsB = randomTeams.slice(4, 8);
-let teamsC = randomTeams.slice(8, 12);
-let teamsD = randomTeams.slice(12, 16);
-let teamsE = randomTeams.slice(16, 20);
-let teamsF = randomTeams.slice(20, 24);
+const teamsA = randomTeams.slice(0, 4);
+const teamsB = randomTeams.slice(4, 8);
+const teamsC = randomTeams.slice(8, 12);
+const teamsD = randomTeams.slice(12, 16);
+const teamsE = randomTeams.slice(16, 20);
+const teamsF = randomTeams.slice(20, 24);
 
 //console.log(teamsA, '\n', teamsB, '\n', teamsC, '\n', teamsD, '\n', teamsE, '\n', teamsF) 
 
@@ -41,23 +42,23 @@ function createGroups() {
 
     const groups = [];
 
-    let groupA = new Group('A', teamsA);
+    const groupA = new Group('A', teamsA);
     groups.push(groupA);
-    let groupB = new Group('B', teamsB);
+    const groupB = new Group('B', teamsB);
     groups.push(groupB);
-    let groupC = new Group('C', teamsC);
+    const groupC = new Group('C', teamsC);
     groups.push(groupC);
-    let groupD = new Group('D', teamsD);
+    const groupD = new Group('D', teamsD);
     groups.push(groupD);
-    let groupE = new Group('E', teamsE);
+    const groupE = new Group('E', teamsE);
     groups.push(groupE);
-    let groupF = new Group('F', teamsF);
+    const groupF = new Group('F', teamsF);
     groups.push(groupF);
 
     return groups;
 }
 
-let groups = createGroups();
+const groups = createGroups();
 
 /* console.log(groups); */
 
@@ -100,24 +101,24 @@ for (let i = 0; i < tournament.matchDays; i++) {    //MUESTRA EL RESULTADO DE LO
 
 
 //Primeros de grupo
-let firstPlaces = nthPlaces(groups, 0);
+const firstPlaces = nthPlaces(groups, 0);
 console.log('Primeros', firstPlaces)
 //Terceros de grupo
-let thirdPlaces = nthPlaces(groups, 2);
+const thirdPlaces = nthPlaces(groups, 2);
 
 //Escoger los 4 mejores terceros de grupo
-let bestThirdPlaces = sortAndSlice(groups, thirdPlaces, sortTeams);
+const bestThirdPlaces = sortAndSlice(groups, thirdPlaces, sortTeams);
 
 //Segundos de grupo
-let secondPlaces = nthPlaces(groups, 1);
+const secondPlaces = nthPlaces(groups, 1);
 
 //Segundos de grupo donde no se ha clasificado el tercero
 
 
 /* console.log(inSameGroup(secondPlaces[0],bestThirdPlaces)); */
 
-let secondPlacesFromNoBestThirdPlaceGroup = splitSecondPlaces('fromNoBestThirdPlaceGroup', secondPlaces, bestThirdPlaces, inSameGroup);
-let restOfSecondPlaces = splitSecondPlaces('rest', secondPlaces, bestThirdPlaces, inSameGroup);
+const secondPlacesFromNoBestThirdPlaceGroup = splitSecondPlaces('fromNoBestThirdPlaceGroup', secondPlaces, bestThirdPlaces, inSameGroup);
+const restOfSecondPlaces = splitSecondPlaces('rest', secondPlaces, bestThirdPlaces, inSameGroup);
 
 console.log('Mejores terceros:', bestThirdPlaces);
 //console.log(secondPlaces);   
@@ -132,11 +133,11 @@ console.log('==========ROUND OF SIXTEEN==========');
 
 
 function setRoundOf16(firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestThirdPlaces, restOfSecondPlaces) {
-    let localTeams = firstPlaces.concat(secondPlacesFromNoBestThirdPlaceGroup)
-    /* let visitorTeams = bestThirdPlaces.concat(restOfSecondPlaces); */
-    let matches = [];
-    let roundOf16 = [];
-    /* console.log('Locales', localTeams); */
+    const localTeams = firstPlaces.concat(secondPlacesFromNoBestThirdPlaceGroup)
+   
+   /*  const matches = []; */
+    const roundOf16 = [];
+
     //Primeros vs. mejores terceros
     for (let i = 0; i < localTeams.length - 4; i++) {
         let index = randomIndex(bestThirdPlaces);
@@ -154,7 +155,7 @@ function setRoundOf16(firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestTh
         }
         console.log('fuera del while loop');
       
-        matches.push(`{Q${i + 1}: {${localTeams[i].name}, ${visitor.name}}`);
+       /*  matches.push(`{Q${i + 1}: {${localTeams[i].name}, ${visitor.name}}`); */
         roundOf16.push({ local: `${localTeams[i].name}`, visitor: `${visitor.name}` });
 
         bestThirdPlaces.splice(index, 1)
@@ -181,42 +182,21 @@ function setRoundOf16(firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestTh
         console.log('fuera del while loop');
 
         /*  console.log('Local: ' , localTeams[i], 'Visitor :' , visitor); */
-        matches.push(`{Q${i + 1}: {${localTeams[i].name}, ${visitor.name}}`);
+       /*  matches.push(`{Q${i + 1}: {${localTeams[i].name}, ${visitor.name}}`); */
         roundOf16.push({ local: `${localTeams[i].name}`, visitor: `${visitor.name}` });
         restOfSecondPlaces.splice(index, 1)
     }
     console.log(roundOf16);
-    console.log(matches);
+  
 
     return roundOf16;
 }
 
 
 const roundOf16 = setRoundOf16(firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestThirdPlaces, restOfSecondPlaces);
-/* let i = 1; */
-let roundOf16Winners = [];
 
-roundOf16.forEach((match,i) => {
-        
-        let localGoals = scoreGoals();
-        let visitorGoals = scoreGoals(); console.log('fuera del while loop');
 
-        let roundOf16Winner  = playMatch(match.local, match.visitor, localGoals, visitorGoals);
-        console.log(`Q${i+1}: ${match.local} ${localGoals}  -  ${visitorGoals} ${match.visitor} ==> ${roundOf16Winner  || 'No winner yet!'}`);
-     
-        while (roundOf16Winner  === undefined){
-            console.log('A rematch will be played!');
-            localGoals = scoreGoals();
-            visitorGoals = scoreGoals();
-            roundOf16Winner = playMatch(match.local, match.visitor, localGoals, visitorGoals);
-            console.log(`Q${i+1}: ${match.local} ${localGoals}  -  ${visitorGoals} ${match.visitor} ==> ${roundOf16Winner  || 'No winner yet!'}`);
-              
-        }
-
-        roundOf16Winners.push(roundOf16Winner); 
-        
-})
-
+const roundOf16Winners = playRound(roundOf16,'Q');
 console.log(roundOf16Winners);
 
 
@@ -227,116 +207,106 @@ console.log('==========QUARTER-FINALS==========');
 //Q3 - Q6
 //Q4 - Q5
 
-/* const roundOfPlayoffs = function(arrayOfTeams, round){  //TODO: PONER LOS 'Q' DE DONDE PROVIENE CADA EQUIPO (DE OCTAVOS) Y NO UN 'Q' NUEVO
-    let roundWinners= [];*/
 
 
-function quarterFinals (arrayOfTeams){  //TODO: PONER LOS 'Q' DE DONDE PROVIENE CADA EQUIPO (DE OCTAVOS) Y NO UN 'Q' NUEVO
-    let roundWinners= [];
-    
-   
-    for (let i=0; i < arrayOfTeams.length/2; i++) {
-             let local = arrayOfTeams[i]
-             let visitor = arrayOfTeams[arrayOfTeams.length-(i+1)]; //ESPECIFICIDAD QUARTERFINALS
-             let localGoals = scoreGoals();
-             let visitorGoals = scoreGoals();
-           
-             let roundWinner= playMatch(local,visitor, localGoals, visitorGoals);
-             console.log(`Q${i+1}: ${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${roundWinner  || 'No winner yet!'}`); 
-             while (roundWinner  === undefined){
-                 console.log('A rematch will be played!');
-                 localGoals = scoreGoals();
-                 visitorGoals = scoreGoals();
-                 roundWinner = playMatch(local,visitor, localGoals, visitorGoals);
-                 console.log(`Q${i+1}: ${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${roundWinner  || 'No winner yet!'}`);
-             }
-             
-             roundWinners.push(roundWinner);
-    } 
 
-    return roundWinners;
+//Emparejamientos de cuartos de final
+
+const setQuarterFinals = function(roundOf16Winners){
+
+const quarterFinals = [];
+quarterFinals.push({local:`${roundOf16Winners[0]}`, visitor: `${roundOf16Winners[7]}`});
+quarterFinals.push({local:`${roundOf16Winners[1]}`, visitor: `${roundOf16Winners[6]}`});
+quarterFinals.push({local:`${roundOf16Winners[2]}`, visitor: `${roundOf16Winners[5]}`});
+quarterFinals.push({local:`${roundOf16Winners[3]}`, visitor: `${roundOf16Winners[4]}`});
+
+return quarterFinals;
+
 }
 
+const quarterFinals = setQuarterFinals(roundOf16Winners);  
+console.log(quarterFinals);
 
-const quarterFinalsWinners = quarterFinals(roundOf16Winners);  //TODO: PONER LOS 'Q' DE DONDE PROVIENE CADA EQUIPO (DE OCTAVOS) Y NO UN 'Q' NUEVO
+//Jugar los cuartos de final
+
+const quarterFinalsWinners = playRound(quarterFinals,'QF');  
 console.log(quarterFinalsWinners);  
 
 
 
-
-/* 
-const quarterFinalsWinners = quarterFinals(roundOf16Winners); */
-/* console.log(quarterFinalsWinners); */
 console.log('==========SEMIFINALS==========');
 
-function semiFinals (arrayOfTeams){  //TODO: PONER LOS 'Q' DE DONDE PROVIENE CADA EQUIPO (DE OCTAVOS) Y NO UN 'Q' NUEVO
-    let roundWinners= [];
+//Emparejamientos de las semifinales
+
+const setSemiFinals = function(quarterFinalWinners){
+
+    const semiFinals = [];
+    semiFinals.push({local:`${quarterFinalsWinners[0]}`, visitor: `${quarterFinalsWinners[2]}`});
+    semiFinals.push({local:`${quarterFinalsWinners[1]}`, visitor: `${quarterFinalsWinners[3]}`});
     
-   
-    for (let i=0; i < arrayOfTeams.length/2; i++) {
-             let local = arrayOfTeams[i]
-             let visitor = arrayOfTeams[i+2]; //ESPECIFICIDAD SEMIFINALS
-             let localGoals = scoreGoals();
-             let visitorGoals = scoreGoals();
-           
-             let roundWinner= playMatch(local,visitor, localGoals, visitorGoals);
-             console.log(`Q${i+1}: ${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${roundWinner  || 'No winner yet!'}`); 
-             while (roundWinner  === undefined){
-                 console.log('A rematch will be played!');
-                 localGoals = scoreGoals();
-                 visitorGoals = scoreGoals();
-                 roundWinner = playMatch(local,visitor, localGoals, visitorGoals);
-                 console.log(`Q${i+1}: ${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${roundWinner  || 'No winner yet!'}`);
-             }
-             
-             roundWinners.push(roundWinner);
-    } 
+    return semiFinals;
+    
+    }
+    
+    const semiFinals = setSemiFinals(quarterFinalsWinners);  
+    console.log(semiFinals);
 
-    return roundWinners;
-}
+//Jugar las semifinales
 
-const semiFinalsWinners = semiFinals(quarterFinalsWinners);  //TODO: PONER LOS 'Q' DE DONDE PROVIENE CADA EQUIPO (DE OCTAVOS) Y NO UN 'Q' NUEVO
-console.log(semiFinalsWinners);  
+    const semiFinalsWinners = playRound(semiFinals,'SF');  
+    console.log(semiFinalsWinners);  
+
+
+
+ 
+
 
 console.log('==========THIRD AND FOURTH PLACE==========');
 
-const thirdAndFourthPlace = [];
+
+//Emparejamientos del partido de tercer y cuarto lugar
+
+let thirdAndFourthPlace=[];
+
 quarterFinalsWinners.forEach((team)=>{
     if (!semiFinalsWinners.includes(team)){
         thirdAndFourthPlace.push(team);
     }
 })
 
+thirdAndFourthPlace = {local: thirdAndFourthPlace[0], visitor: thirdAndFourthPlace[1]};
 
-function thirdPlace(thirdAndFourthPlace){
+console.log(thirdAndFourthPlace);
 
-    let local = thirdAndFourthPlace[0];
-    let visitor = thirdAndFourthPlace[1];
-    
+//Jugar el partido por el tercer lugar
+const thirdPlaceMatch = function (thirdAndFourthPlace){
+
+    let local = thirdAndFourthPlace.local;
+    let visitor = thirdAndFourthPlace.visitor;
     let localGoals = scoreGoals();
     let visitorGoals = scoreGoals();
-    
-    let thirdPlaceWinner = playMatch(local,visitor, localGoals, visitorGoals);
-    
-    console.log(`${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${thirdPlaceWinner || 'No winner yet!'}`); 
-    
-    while (thirdPlaceWinner  === undefined){
+    let thirdPlaceWinner = playMatch(local, visitor, localGoals, visitorGoals);
+    console.log(`${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${thirdPlaceWinner  || 'No winner yet!'}`);
+    while(thirdPlaceWinner === undefined){    
         console.log('A rematch will be played!');
         localGoals = scoreGoals();
         visitorGoals = scoreGoals();
-        thirdPlaceWinner = playMatch(local,visitor, localGoals, visitorGoals);
-        console.log(`${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${thirdPlaceWinner || 'No winner yet!'}`);
+        thirdPlaceWinner = playMatch(thirdAndFourthPlace[0], thirdAndFourthPlace[1], localGoals, visitorGoals)
+        console.log(`${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${thirdPlaceWinner  || 'No winner yet!'}`);
     }
-    return thirdPlaceWinner;            
-}
 
-let thirdPlaceWinner = thirdPlace(thirdAndFourthPlace);
+    return thirdPlaceWinner;
+}
+const thirdPlaceWinner = thirdPlaceMatch(thirdAndFourthPlace);
 
 
 console.log('==========FINAL==========');
-function final(){
-    let local = semiFinalsWinners[0];
-    let visitor = semiFinalsWinners[1];
+
+//Los ganadores de las semifinales juegan la final
+
+const final = function(){
+    const local = semiFinalsWinners[0];
+    const visitor = semiFinalsWinners[1];
     let localGoals = scoreGoals();
     let visitorGoals = scoreGoals();
     let champion = playMatch(local,visitor, localGoals, visitorGoals);
@@ -354,12 +324,12 @@ function final(){
 }
         
 
-let champion = final(semiFinalsWinners);
+const champion = final(semiFinalsWinners);
 console.log(`======================================`);
 console.log(`${champion} is the new Euro Cup Champion!`);
 
-
-
+ 
+ 
 
 //TODO Mostrar el campeón, subcampeón, tercer y cuarto lugar
 
