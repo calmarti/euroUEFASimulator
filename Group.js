@@ -1,3 +1,4 @@
+import { sortTeams } from "./utils/aux.js";
 import { scoreGoals } from "./utils/aux.js";
 import { playMatch } from "./utils/aux.js";
 
@@ -53,7 +54,7 @@ export default class Group {
     setupSchedule() {
         this.initSchedule(); // crea la tabla con las celdas vacías (template {home: 'Home', away: 'Away'})
         this.setLocalTeams(); // hace un set de cada partido.home
-        this.setAwayTeams(); //PETA
+        this.setVisitorTeams(); 
     }
 
     initSchedule() {
@@ -63,7 +64,7 @@ export default class Group {
         for (let i = 0; i < numberOfMatchDays; i++) {
             const matchDay = []; // matchDay ===> jornada
             for (let j = 0; j < numberOfMatchesPerMatchDay; j++) {
-                const match = { home: 'Home', away: 'Away' }; // match ===> partido
+                const match = { local: 'local', visitor: 'visitor' }; // match ===> partido
                 matchDay.push(match);
 
 
@@ -78,27 +79,27 @@ export default class Group {
     setLocalTeams() {
         const teamNames = this.teams.map(team => team.name); // array de nombres de los equipos ['A', 'B', 'C', 'D', 'E', 'F']
         let teamIndex = 0;
-        const maxHomeTeams = this.teams.length - 1 - 1; // ['A', 'B', 'C', 'D', 'E', 'F'].length === 6
+        const maxLocalTeams = this.teams.length - 1 - 1; // ['A', 'B', 'C', 'D', 'E', 'F'].length === 6
         this.schedule.forEach(matchDay => { // para cada jornada de la liga
             matchDay.forEach(match => {             // para cada partido de la jornada
-                match.home = teamNames[teamIndex];
+                match.local = teamNames[teamIndex];
                 teamIndex++;
-                if (teamIndex > maxHomeTeams) {
+                if (teamIndex > maxLocalTeams) {
                     teamIndex = 0;
                 }
             })
         })
     }
 
-    setAwayTeams() {  //TODO Arreglar el atributo local/away de uno de los partidos
+    setVisitorTeams() {  //TODO Arreglar el atributo local/away de uno de los partidos
         const teamNames = this.teams.map(team => team.name);
         let fourthTeam = this.teams.length - 1;
         let index = fourthTeam;
         for (let i = 0; i < 3; i++) {
-            this.schedule[i][0]['away'] = teamNames[index];
+            this.schedule[i][0]['visitor'] = teamNames[index];
         }
         for (let i = 0; i < 3; i++) {
-            this.schedule[i][1]['away'] = teamNames[--index];
+            this.schedule[i][1]['visitor'] = teamNames[--index];
 
         }
 
@@ -118,7 +119,7 @@ export default class Group {
         for (let i = 0; i < this.schedule.length; i++) {
             console.log(`\nMatchday ${i + 1}\n`);
             for (let j = 0; j < 2; j++) {
-                console.log(`${this.schedule[i][j]['home']} vs. ${this.schedule[i][j]['away']}`);
+                console.log(`${this.schedule[i][j]['local']} vs. ${this.schedule[i][j]['visitor']}`);
             }
 
         }
@@ -129,31 +130,14 @@ export default class Group {
 
     playMatchDay(matchDay, match) {
     
-        const local = this.schedule[matchDay][match]['home'];
-        const visitor = this.schedule[matchDay][match]['away'];
+        const local = this.schedule[matchDay][match]['local'];
+        const visitor = this.schedule[matchDay][match]['visitor'];
         
         const localGoals = scoreGoals();
         const visitorGoals = scoreGoals();
         
         const winner = playMatch(local, visitor, localGoals, visitorGoals);
 
-        /*        let winner = undefined;
-        let loser = undefined;
-        let draw = false;
-
-        if (localGoals > visitorGoals) {
-            winner = local;
-            loser = visitor;
-
-        }
-        else if (localGoals < visitorGoals) {
-            winner = visitor;
-            loser = local;
-
-        }
-        else {
-            draw = true;
-        } */
 
         this.updateTeams(local, visitor, localGoals, visitorGoals, winner);
         const result = `${local} ${localGoals} - ${visitor} ${visitorGoals} --> ${winner || 'It\'s a draw'}`;
@@ -206,30 +190,8 @@ export default class Group {
     }
 
  
-      
-    sortTeams() {      //TODO PROBAR VERSIÓN SORT-TEAMS EN AUX.JS Y SI FUNCIONA ELIMINAR ESTA!
-        this.teams.sort((teamA, teamB) => {
-            if (teamB.points !== teamA.points) {
-                return teamB.points - teamA.points;
-            }
-            else if (teamA.goalsDiff !== teamB.goalsDiff) {
-                return teamB.goalsDiff - teamA.goalsDiff
-            }
-            else {
-                if (teamA.name < teamB.name) {
-                    return -1;
-                }
-            }
-
-        })
-
-        /* console.log(this.teams); */
-    } 
-
-
-
     showMatchDayResults(){
-        this.sortTeams();
+        sortTeams(this.teams);
         console.table(this.teams);
         }
     

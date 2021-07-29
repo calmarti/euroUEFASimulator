@@ -229,12 +229,17 @@ console.log(quarterFinals);
 
 //Jugar los cuartos de final
 
+
 const quarterFinalsWinners = playRound(quarterFinals,'QF');  
 console.log(quarterFinalsWinners);  
 
 
 
 console.log('==========SEMIFINALS==========');
+
+
+
+
 
 //Emparejamientos de las semifinales
 
@@ -256,9 +261,6 @@ const setSemiFinals = function(quarterFinalWinners){
     const semiFinalsWinners = playRound(semiFinals,'SF');  
     console.log(semiFinalsWinners);  
 
-
-
- 
 
 
 console.log('==========THIRD AND FOURTH PLACE==========');
@@ -328,8 +330,7 @@ const champion = final(semiFinalsWinners);
 console.log(`======================================`);
 console.log(`${champion} is the new Euro Cup Champion!`);
 
- 
- 
+
 
 //TODO Mostrar el campeón, subcampeón, tercer y cuarto lugar
 

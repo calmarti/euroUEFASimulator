@@ -7,8 +7,8 @@ export const scoreGoals = function () {
 export const playMatch = function (local, visitor, localGoals, visitorGoals) {
 
     let winner = undefined;
-    let loser = undefined;
-    let draw = false;
+   /*  let loser = undefined;
+    let draw = false; */
 
 
     if (localGoals > visitorGoals) {
@@ -31,7 +31,7 @@ export const playMatch = function (local, visitor, localGoals, visitorGoals) {
 }
 
 
-export const playRound = function(arrayOfMatches,matchId){  //TODO: PONER LOS 'Q' DE DONDE PROVIENE CADA EQUIPO (DE OCTAVOS) Y NO UN 'Q' NUEVO
+export const playRound = function(arrayOfMatches,matchId){  
     const roundWinners= [];
     for (let i=0; i < arrayOfMatches.length; i++){
         const local = arrayOfMatches[i].local;
@@ -39,14 +39,14 @@ export const playRound = function(arrayOfMatches,matchId){  //TODO: PONER LOS 'Q
         let localGoals = scoreGoals();
         let visitorGoals = scoreGoals();
         let roundWinner = playMatch(local, visitor, localGoals, visitorGoals);
-        console.log(`${matchId}${i+1}: ${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${roundWinner  || 'No winner yet!'}`); 
+        console.log(`${matchId}${i+1}: ${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${roundWinner  || 'No winner yet!'}`);
 
         while (roundWinner ===undefined){
             console.log('A rematch will be played!');
             localGoals = scoreGoals();
             visitorGoals = scoreGoals();
             roundWinner = playMatch(local,visitor, localGoals, visitorGoals);
-            console.log(`${matchId}${i+1}: ${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${roundWinner  || 'No winner yet!'}`); 
+            console.log(`${matchId}${i+1}: ${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${roundWinner  || 'No winner yet!'}`);
         }
         roundWinners.push(roundWinner);
     }
