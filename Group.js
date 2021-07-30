@@ -21,7 +21,7 @@ export default class Group {
             pointsPerWin: 3,
             pointsPerDraw: 1,
             pointsPerLoss: 0,
-            matchDays:3,
+            matchDays: 3,
             rounds: 1
         }
 
@@ -38,7 +38,7 @@ export default class Group {
 
     customizeTeam(teamName) {
         return {
-            
+
             name: teamName,
             group: this.name,
             points: 0,
@@ -52,36 +52,33 @@ export default class Group {
     }
 
     setupSchedule() {
-        this.initSchedule(); // crea la tabla con las celdas vacías (template {home: 'Home', away: 'Away'})
-        this.setLocalTeams(); // hace un set de cada partido.home
-        this.setVisitorTeams(); 
+        this.initSchedule();
+        this.setLocalTeams();
+        this.setVisitorTeams();
+        this.setLastTeam(); 
     }
 
     initSchedule() {
-        const numberOfMatchDays = this.teams.length - 1; // numero de jornadas
-        const numberOfMatchesPerMatchDay = this.teams.length / 2; // numero de partidos por jornada
+        const numberOfMatchDays = this.teams.length - 1;
+        const matchesPerMatchDay = this.teams.length / 2;
 
         for (let i = 0; i < numberOfMatchDays; i++) {
-            const matchDay = []; // matchDay ===> jornada
-            for (let j = 0; j < numberOfMatchesPerMatchDay; j++) {
-                const match = { local: 'local', visitor: 'visitor' }; // match ===> partido
+            const matchDay = [];
+            for (let j = 0; j < matchesPerMatchDay; j++) {
+                const match = { local: 'local', visitor: 'visitor' };
                 matchDay.push(match);
-
-
             }
-            // ya tenemos todos los partidos de una jornada
-            this.schedule.push(matchDay) // añadimos la jornada a la planificación
+            this.schedule.push(matchDay)
         }
-
-
     }
 
+
     setLocalTeams() {
-        const teamNames = this.teams.map(team => team.name); // array de nombres de los equipos ['A', 'B', 'C', 'D', 'E', 'F']
+        const teamNames = this.teams.map(team => team.name);
         let teamIndex = 0;
-        const maxLocalTeams = this.teams.length - 1 - 1; // ['A', 'B', 'C', 'D', 'E', 'F'].length === 6
-        this.schedule.forEach(matchDay => { // para cada jornada de la liga
-            matchDay.forEach(match => {             // para cada partido de la jornada
+        const maxLocalTeams = this.teams.length - 2;
+        this.schedule.forEach((matchDay, matchDayIndex) => {
+            matchDay.forEach((match , matchIndex) => {
                 match.local = teamNames[teamIndex];
                 teamIndex++;
                 if (teamIndex > maxLocalTeams) {
@@ -90,21 +87,55 @@ export default class Group {
             })
         })
     }
-
-    setVisitorTeams() {  //TODO Arreglar el atributo local/away de uno de los partidos
+    
+    setVisitorTeams() {
+        const numberOfMatchDays = this.teams.length - 1;
+        const matchesPerMatchDay = this.teams.length / 2;
+        
         const teamNames = this.teams.map(team => team.name);
-        let fourthTeam = this.teams.length - 1;
-        let index = fourthTeam;
-        for (let i = 0; i < 3; i++) {
-            this.schedule[i][0]['visitor'] = teamNames[index];
+        let index = this.teams.length - 2;
+        
+        for (let i=0; i < numberOfMatchDays; i++) {
+            for (let j=1; j < matchesPerMatchDay; j++) {
+                
+                console.log(i, j, index);
+  
+                    
+                    this.schedule[i][j].visitor = teamNames[index];
+                    index--;
+                    /*if (index < 0){
+                        console.log(i,j,index);
+                        index = this.teams.length - 2;
+                        console.log(i,j,index);
+                        this.schedule[i][j].visitor = teamNames[index]; 
+                    }   */
+                }
+            }
+                    
+    
+        for (let i=0; i < this.schedule.length; i++){
+            if ((this.schedule[i][0]) && (i % 2 === 0));
+            {
+                this.schedule[i][0].visitor = this.schedule[i][0].local;  
+            }
         }
-        for (let i = 0; i < 3; i++) {
-            this.schedule[i][1]['visitor'] = teamNames[--index];
-
-        }
-
-
     }
+                
+        
+    setLastTeam() {
+        const numberOfMatchDays = this.teams.length - 1;
+        const teamNames = this.teams.map(team => team.name);
+        const index = this.teams.length - 1;
+        for (let i = 0; i < numberOfMatchDays; i++) {
+            if (i % 2 === 0) {
+                this.schedule[i][0].visitor = teamNames[index];
+            }
+            else {
+                this.schedule[i][0].local = teamNames[index];
+            }
+        }
+    }
+
 
     showGroupSchedule() {
 
@@ -129,13 +160,13 @@ export default class Group {
 
 
     playMatchDay(matchDay, match) {
-    
+
         const local = this.schedule[matchDay][match]['local'];
         const visitor = this.schedule[matchDay][match]['visitor'];
-        
+
         const localGoals = scoreGoals();
         const visitorGoals = scoreGoals();
-        
+
         const winner = playMatch(local, visitor, localGoals, visitorGoals);
 
 
@@ -147,7 +178,7 @@ export default class Group {
 
     updateTeams(local, visitor, localGoals, visitorGoals, winner) {
         this.teams.forEach(team => {
-           
+
             if (team.name === local) {
                 team.goalsFor += localGoals
                 team.goalsAgainst += visitorGoals
@@ -189,12 +220,12 @@ export default class Group {
         })
     }
 
- 
-    showMatchDayResults(){
+
+    showMatchDayResults() {
         sortTeams(this.teams);
         console.table(this.teams);
-        }
-    
+    }
+
 
 }
 

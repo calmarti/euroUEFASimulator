@@ -125,11 +125,6 @@ export const splitSecondPlaces = function (slice, arrayA, arrayB, inSameGroup) {
 }
 
 
-export const randomIndex = function (array) {
-    return Math.floor(Math.random() * (array.length));
-}
-
-
 
 export const avoidSameGroup = function(firstArray, secondArray){
     

@@ -5,7 +5,6 @@ import { sortTeams } from './utils/aux.js';
 import { sortAndSlice } from './utils/aux.js';
 import { inSameGroup } from './utils/aux.js';
 import { splitSecondPlaces } from './utils/aux.js';
-import { randomIndex } from './utils/aux.js';
 import { scoreGoals } from './utils/aux.js';
 import { playMatch } from './utils/aux.js';
 import { playRound } from './utils/aux.js';
@@ -79,14 +78,14 @@ showTournamentSchedule(groups);
 
 
 
-//JUGAMOS LOS PARTIDOS JORNADA A JORNADA Y TRAS ACABAR CADA JORNADA MOSTRAMOS TABLA 
-
-
 
 console.log(`================================
 ======THE EUROCUP STARTS!======\n================================\n`);
 
-for (let i = 0; i < tournament.matchDays; i++) {    //MUESTRA EL RESULTADO DE LOS PARTIDOS DE CADA JORNADA ORDENADOS POR GRUPO
+//Muestra el resultado de cada jornada grupo por grupo
+//Tras acabar la jornada de cada grupo, muestra la tabla de clasificación actualizada
+
+for (let i = 0; i < tournament.matchDays; i++) {    
 
     console.log(`=== Matchday ${i + 1}===`);
 
@@ -103,6 +102,7 @@ for (let i = 0; i < tournament.matchDays; i++) {    //MUESTRA EL RESULTADO DE LO
 
 //Primeros de grupo
 const firstPlaces = nthPlaces(groups, 0);
+
 console.log('Primeros', firstPlaces)
 //Terceros de grupo
 const thirdPlaces = nthPlaces(groups, 2);
@@ -116,15 +116,12 @@ const secondPlaces = nthPlaces(groups, 1);
 //Segundos de grupo donde no se ha clasificado el tercero
 
 
-/* console.log(inSameGroup(secondPlaces[0],bestThirdPlaces)); */
 
 const secondPlacesFromNoBestThirdPlaceGroup = splitSecondPlaces('fromNoBestThirdPlaceGroup', secondPlaces, bestThirdPlaces, inSameGroup);
 const restOfSecondPlaces = splitSecondPlaces('rest', secondPlaces, bestThirdPlaces, inSameGroup);
 
 console.log('Mejores terceros:', bestThirdPlaces);
-//console.log(secondPlaces);   
-//console.log(secondPlacesFromNoBestThirdPlaceGroup);
-//console.log(restOfSecondPlaces);  
+
 
 
 //COMIENZA LA FASE DE ELIMINATORIAS!
@@ -172,8 +169,6 @@ console.log(roundOf16);
 
     
 
-/*
-
 const roundOf16Winners = playRound(roundOf16,'Q');
 console.log(roundOf16Winners);
 
@@ -184,9 +179,6 @@ console.log('==========QUARTER-FINALS==========');
 //Q2 - Q7
 //Q3 - Q6
 //Q4 - Q5
-
-
-
 
 //Emparejamientos de cuartos de final
 
@@ -217,8 +209,6 @@ console.log('==========SEMIFINALS==========');
 
 
 
-
-
 //Emparejamientos de las semifinales
 
 const setSemiFinals = function(quarterFinalsWinners){
@@ -237,9 +227,7 @@ const setSemiFinals = function(quarterFinalsWinners){
 //Jugar las semifinales
 
     const semiFinalsWinners = playRound(semiFinals,'SF');
-    console.log(semiFinalsWinners);
-
-
+ 
 
 console.log('==========THIRD AND FOURTH PLACE==========');
 
@@ -256,7 +244,6 @@ quarterFinalsWinners.forEach((team)=>{
 
 thirdAndFourthPlace = {local: thirdAndFourthPlace[0], visitor: thirdAndFourthPlace[1]};
 
-console.log(thirdAndFourthPlace);
 
 //Jugar el partido por el tercer lugar
 const thirdPlaceMatch = function (thirdAndFourthPlace){
@@ -268,10 +255,11 @@ const thirdPlaceMatch = function (thirdAndFourthPlace){
     let thirdPlaceWinner = playMatch(local, visitor, localGoals, visitorGoals);
     console.log(`${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${thirdPlaceWinner  || 'No winner yet!'}`);
     while(thirdPlaceWinner === undefined){
+        
         console.log('A rematch will be played!');
         localGoals = scoreGoals();
         visitorGoals = scoreGoals();
-        thirdPlaceWinner = playMatch(thirdAndFourthPlace[0], thirdAndFourthPlace[1], localGoals, visitorGoals)
+        thirdPlaceWinner = playMatch(local, visitor, localGoals, visitorGoals)
         console.log(`${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${thirdPlaceWinner  || 'No winner yet!'}`);
     }
 
@@ -303,13 +291,10 @@ const final = function(){
     return champion;
 }
 
-*/
 
-//const champion = final(semiFinalsWinners);
-//console.log(`======================================`);
-//console.log(`${champion} is the new Euro Cup Champion!`);
-
-//TODO Mostrar el campeón
+const champion = final(semiFinalsWinners);
+console.log(`======================================`);
+console.log(`${champion} is the new Euro Cup Champion!`);
 
 
 
