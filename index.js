@@ -10,15 +10,10 @@ import { playMatch } from './utils/aux.js';
 import { playRound } from './utils/aux.js';
 import { avoidSameGroup } from './utils/aux.js';
 
-const tournament = {
-    matchDays: 3
-};
 
-
-//Distribución aleatoria de los equipos en 6 grupos de 4 equipos cada uno
+//Distribución aleatoria de los 24 equipos en 6 grupos de 4 equipos cada uno
 
 const randomTeams = teamPool.sort(() => { return 0.5 - Math.random() });
-/* console.log(randomTeams); */
 
 const teamsA = randomTeams.slice(0, 4);
 const teamsB = randomTeams.slice(4, 8);
@@ -27,21 +22,16 @@ const teamsD = randomTeams.slice(12, 16);
 const teamsE = randomTeams.slice(16, 20);
 const teamsF = randomTeams.slice(20, 24);
 
-//console.log(teamsA, '\n', teamsB, '\n', teamsC, '\n', teamsD, '\n', teamsE, '\n', teamsF) 
-
-
-
 
 console.log(`Groups and teams
 ============`);
-
 
 
 //Creación de los 6 grupos y de un array de grupos 'groups'
 function createGroups() {
 
     const groups = [];
-
+    
     const groupA = new Group('A', teamsA);
     groups.push(groupA);
     const groupB = new Group('B', teamsB);
@@ -53,14 +43,13 @@ function createGroups() {
     const groupE = new Group('E', teamsE);
     groups.push(groupE);
     const groupF = new Group('F', teamsF);
-    groups.push(groupF);
-
+    groups.push(groupF); 
+    
     return groups;
 }
+    
 
 const groups = createGroups();
-
-/* console.log(groups); */
 
 
 function showTournamentSchedule(groups) {
@@ -73,19 +62,18 @@ function showTournamentSchedule(groups) {
 }
 
 
-//Mostrar los grupos y su schedule: jornadas y sus partidos grupo por grupo 
+//Mostrar los grupos y sus calendarios: jornadas y partidos grupo por grupo 
 showTournamentSchedule(groups);
-
 
 
 
 console.log(`================================
 ======THE EUROCUP STARTS!======\n================================\n`);
 
-//Muestra el resultado de cada jornada grupo por grupo
+//Mostrar el resultado de cada jornada grupo por grupo
 //Tras acabar la jornada de cada grupo, muestra la tabla de clasificación actualizada
 
-for (let i = 0; i < tournament.matchDays; i++) {    
+for (let i = 0; i < 3; i++) {    
 
     console.log(`=== Matchday ${i + 1}===`);
 
@@ -103,7 +91,8 @@ for (let i = 0; i < tournament.matchDays; i++) {
 //Primeros de grupo
 const firstPlaces = nthPlaces(groups, 0);
 
-console.log('Primeros', firstPlaces)
+console.log('Primeros', firstPlaces);
+
 //Terceros de grupo
 const thirdPlaces = nthPlaces(groups, 2);
 
@@ -113,18 +102,18 @@ const bestThirdPlaces = sortAndSlice(groups, thirdPlaces, sortTeams);
 //Segundos de grupo
 const secondPlaces = nthPlaces(groups, 1);
 
-//Segundos de grupo donde no se ha clasificado el tercero
-
-
-
+//Segundos de grupo sin tercero clasificado
 const secondPlacesFromNoBestThirdPlaceGroup = splitSecondPlaces('fromNoBestThirdPlaceGroup', secondPlaces, bestThirdPlaces, inSameGroup);
+
+//Resto de segundos de grupo
 const restOfSecondPlaces = splitSecondPlaces('rest', secondPlaces, bestThirdPlaces, inSameGroup);
+
 
 console.log('Mejores terceros:', bestThirdPlaces);
 
 
 
-//COMIENZA LA FASE DE ELIMINATORIAS!
+//Comienza la fase de playoffs
 
 console.log('==========ROUND OF SIXTEEN==========');
 
@@ -132,12 +121,16 @@ console.log('==========ROUND OF SIXTEEN==========');
 const setRoundOf16 = function (firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestThirdPlaces, restOfSecondPlaces) {
     const roundOf16 = [];
 
-    //Primeros vs. mejores terceros
+    //Emparejamientos de octavos en dos subgrupos de ocho:
+    //(1) Primeros vs. mejores terceros 
+    //(2) Primeros y segundos de grupos sin terceros clasificados vs. resto de segundos
+
+    //(1) Primeros vs. mejores terceros
     const first4Locals = firstPlaces.slice(0, 4);
     let first4Visitors = bestThirdPlaces;
 
 
-    //Evita los cruces de equipos del mismo grupo
+    //Evitar los cruces con equipos del mismo grupo
 
     first4Visitors = avoidSameGroup(first4Locals, first4Visitors);
     console.log(first4Visitors);
@@ -146,12 +139,12 @@ const setRoundOf16 = function (firstPlaces, secondPlacesFromNoBestThirdPlaceGrou
         roundOf16.push({ local: `${first4Locals[i].name}`, visitor: `${first4Visitors[i].name}` });
     }
 
-    console.log(roundOf16);
-
-
-    //Primeros y segundos de grupos sin terceros clasificados vs. resto de segundos
+ 
+    //(2) Primeros y segundos de grupos sin terceros clasificados vs. resto de segundos
     const last4Locals = firstPlaces.slice(4).concat(secondPlacesFromNoBestThirdPlaceGroup);
     let last4Visitors = restOfSecondPlaces;
+
+    //Evitar los cruces con equipos del mismo grupo
 
     last4Visitors = avoidSameGroup(last4Locals, last4Visitors);
     console.log(last4Visitors);
@@ -167,10 +160,11 @@ const setRoundOf16 = function (firstPlaces, secondPlacesFromNoBestThirdPlaceGrou
 const roundOf16 = setRoundOf16(firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestThirdPlaces, restOfSecondPlaces);
 console.log(roundOf16);
 
-    
+
+//Jugar los octavos de final
 
 const roundOf16Winners = playRound(roundOf16,'Q');
-console.log(roundOf16Winners);
+
 
 
 console.log('==========QUARTER-FINALS==========');
@@ -180,7 +174,7 @@ console.log('==========QUARTER-FINALS==========');
 //Q3 - Q6
 //Q4 - Q5
 
-//Emparejamientos de cuartos de final
+//Emparejamientos de cuartos de final según el diagrama del enunciado
 
 const setQuarterFinals = function(roundOf16Winners){
 
@@ -197,11 +191,11 @@ return quarterFinals;
 const quarterFinals = setQuarterFinals(roundOf16Winners);
 console.log(quarterFinals);
 
+
 //Jugar los cuartos de final
 
-
 const quarterFinalsWinners = playRound(quarterFinals,'QF');
-console.log(quarterFinalsWinners);
+
 
 
 
