@@ -9,14 +9,15 @@ import { randomIndex } from './utils/aux.js';
 import { scoreGoals } from './utils/aux.js';
 import { playMatch } from './utils/aux.js';
 import { playRound } from './utils/aux.js';
-
+import { avoidSameGroup } from './utils/aux.js';
 
 const tournament = {
     matchDays: 3
 };
 
 
-//DISTRIBUYE ALEATORIAMENTE LOS EQUIPOS POR GRUPO
+//Distribución aleatoria de los equipos en 6 grupos de 4 equipos cada uno
+
 const randomTeams = teamPool.sort(() => { return 0.5 - Math.random() });
 /* console.log(randomTeams); */
 
@@ -37,7 +38,7 @@ console.log(`Groups and teams
 
 
 
-//CREA LOS GRUPOS Y LOS GUARDA EN UN ARRAY
+//Creación de los 6 grupos y de un array de grupos 'groups'
 function createGroups() {
 
     const groups = [];
@@ -73,7 +74,7 @@ function showTournamentSchedule(groups) {
 }
 
 
-//MUESTRA LOS GRUPOS Y EL SCHEDULE: JORNADAS CON SUS PARTIDOS GRUPO POR GRUPO
+//Mostrar los grupos y su schedule: jornadas y sus partidos grupo por grupo 
 showTournamentSchedule(groups);
 
 
@@ -131,70 +132,47 @@ console.log('Mejores terceros:', bestThirdPlaces);
 console.log('==========ROUND OF SIXTEEN==========');
 
 
-
-function setRoundOf16(firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestThirdPlaces, restOfSecondPlaces) {
-    const localTeams = firstPlaces.concat(secondPlacesFromNoBestThirdPlaceGroup)
-   
-   /*  const matches = []; */
+const setRoundOf16 = function (firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestThirdPlaces, restOfSecondPlaces) {
     const roundOf16 = [];
 
     //Primeros vs. mejores terceros
-    for (let i = 0; i < localTeams.length - 4; i++) {
-        let index = randomIndex(bestThirdPlaces);
-        let visitor = bestThirdPlaces[index];
-        console.log('primer puto bug?');
-        while (visitor.group === localTeams[i].group)   //TODO Arreglar bug de while loop: en la última vuelta no sale del loop
+    const first4Locals = firstPlaces.slice(0, 4);
+    let first4Visitors = bestThirdPlaces;
 
-        {
-            console.log('dentro del while loop');
-            console.log(index, visitor.group, localTeams[i].group);
-            index = randomIndex(bestThirdPlaces);
-            visitor = bestThirdPlaces[index];
-            console.log(index, visitor.group, localTeams[i].group);
-           
-        }
-        console.log('fuera del while loop');
-      
-       /*  matches.push(`{Q${i + 1}: {${localTeams[i].name}, ${visitor.name}}`); */
-        roundOf16.push({ local: `${localTeams[i].name}`, visitor: `${visitor.name}` });
 
-        bestThirdPlaces.splice(index, 1)
+    //Evita los cruces de equipos del mismo grupo
 
+    first4Visitors = avoidSameGroup(first4Locals, first4Visitors);
+    console.log(first4Visitors);
+
+    for (let i = 0; i < first4Locals.length; i++) {
+        roundOf16.push({ local: `${first4Locals[i].name}`, visitor: `${first4Visitors[i].name}` });
     }
 
     console.log(roundOf16);
-    
+
+
     //Primeros y segundos de grupos sin terceros clasificados vs. resto de segundos
-    for (let i = 4; i < localTeams.length; i++) {
-        let index = randomIndex(restOfSecondPlaces);
-        let visitor = restOfSecondPlaces[index];
-        console.log('segundo puto bug?');
+    const last4Locals = firstPlaces.slice(4).concat(secondPlacesFromNoBestThirdPlaceGroup);
+    let last4Visitors = restOfSecondPlaces;
 
-        while (visitor.group === localTeams[i].group)  //TODO Arreglar bug de while loop
+    last4Visitors = avoidSameGroup(last4Locals, last4Visitors);
+    console.log(last4Visitors);
 
-        {
-            console.log('dentro del while loop');
-            console.log(index, visitor.group, localTeams[i].group);
-            index = randomIndex(restOfSecondPlaces);
-            visitor = restOfSecondPlaces[index];
-            console.log(index, visitor.group, localTeams[i].group);
-        }
-        console.log('fuera del while loop');
-
-        /*  console.log('Local: ' , localTeams[i], 'Visitor :' , visitor); */
-       /*  matches.push(`{Q${i + 1}: {${localTeams[i].name}, ${visitor.name}}`); */
-        roundOf16.push({ local: `${localTeams[i].name}`, visitor: `${visitor.name}` });
-        restOfSecondPlaces.splice(index, 1)
+    for (let i = 0; i < last4Locals.length; i++) {
+        roundOf16.push({ local: `${last4Locals[i].name}`, visitor: `${last4Visitors[i].name}` });
     }
-    console.log(roundOf16);
-  
 
     return roundOf16;
 }
 
 
 const roundOf16 = setRoundOf16(firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestThirdPlaces, restOfSecondPlaces);
+console.log(roundOf16);
 
+    
+
+/*
 
 const roundOf16Winners = playRound(roundOf16,'Q');
 console.log(roundOf16Winners);
@@ -224,14 +202,14 @@ return quarterFinals;
 
 }
 
-const quarterFinals = setQuarterFinals(roundOf16Winners);  
+const quarterFinals = setQuarterFinals(roundOf16Winners);
 console.log(quarterFinals);
 
 //Jugar los cuartos de final
 
 
-const quarterFinalsWinners = playRound(quarterFinals,'QF');  
-console.log(quarterFinalsWinners);  
+const quarterFinalsWinners = playRound(quarterFinals,'QF');
+console.log(quarterFinalsWinners);
 
 
 
@@ -243,23 +221,23 @@ console.log('==========SEMIFINALS==========');
 
 //Emparejamientos de las semifinales
 
-const setSemiFinals = function(quarterFinalWinners){
+const setSemiFinals = function(quarterFinalsWinners){
 
     const semiFinals = [];
     semiFinals.push({local:`${quarterFinalsWinners[0]}`, visitor: `${quarterFinalsWinners[2]}`});
     semiFinals.push({local:`${quarterFinalsWinners[1]}`, visitor: `${quarterFinalsWinners[3]}`});
-    
+
     return semiFinals;
-    
+
     }
-    
-    const semiFinals = setSemiFinals(quarterFinalsWinners);  
+
+    const semiFinals = setSemiFinals(quarterFinalsWinners);
     console.log(semiFinals);
 
 //Jugar las semifinales
 
-    const semiFinalsWinners = playRound(semiFinals,'SF');  
-    console.log(semiFinalsWinners);  
+    const semiFinalsWinners = playRound(semiFinals,'SF');
+    console.log(semiFinalsWinners);
 
 
 
@@ -289,7 +267,7 @@ const thirdPlaceMatch = function (thirdAndFourthPlace){
     let visitorGoals = scoreGoals();
     let thirdPlaceWinner = playMatch(local, visitor, localGoals, visitorGoals);
     console.log(`${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${thirdPlaceWinner  || 'No winner yet!'}`);
-    while(thirdPlaceWinner === undefined){    
+    while(thirdPlaceWinner === undefined){
         console.log('A rematch will be played!');
         localGoals = scoreGoals();
         visitorGoals = scoreGoals();
@@ -312,7 +290,7 @@ const final = function(){
     let localGoals = scoreGoals();
     let visitorGoals = scoreGoals();
     let champion = playMatch(local,visitor, localGoals, visitorGoals);
-    console.log(`${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${champion|| 'No winner yet!'}`); 
+    console.log(`${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${champion|| 'No winner yet!'}`);
 
     while (champion  === undefined){
         console.log('A rematch will be played!');
@@ -322,15 +300,17 @@ const final = function(){
         console.log(`${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${champion || 'No winner yet!'}`);
     }
 
-    return champion;            
+    return champion;
 }
-        
 
-const champion = final(semiFinalsWinners);
-console.log(`======================================`);
-console.log(`${champion} is the new Euro Cup Champion!`);
+*/
+
+//const champion = final(semiFinalsWinners);
+//console.log(`======================================`);
+//console.log(`${champion} is the new Euro Cup Champion!`);
+
+//TODO Mostrar el campeón
 
 
 
-//TODO Mostrar el campeón, subcampeón, tercer y cuarto lugar
 

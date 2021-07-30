@@ -131,10 +131,67 @@ export const randomIndex = function (array) {
 
 
 
+export const avoidSameGroup = function(firstArray, secondArray){
+    
+    for (let i=0; i < firstArray.length; i++){       
+       
+       
+            if (firstArray[i].group !== secondArray[i].group){
+                console.log(firstArray[i].group);
+           
+                console.log(i);
 
+            } 
+             
+            else{
+                console.log('same group');
+                console.log(secondArray);
 
+                if (i==0){
+                    let swappedTeam = secondArray.splice(i,1)[0];
+                    secondArray.splice(3,0,swappedTeam);
+                   /*  roundOf16.push({local:`${firstArray[i].name}`, visitor:`${secondArray[i].name}`});  */ 
+                    console.log(i);
+                    console.log(secondArray);
+                }
+                else if (i==1 | i==2 | i==3){
+                    let swappedTeam = secondArray.splice(i,1)[0];
+                    secondArray.unshift(swappedTeam);
+                    /* roundOf16.push({local:`${firstArray[i].name}`, visitor:`${secondArray[i].name}`}); */
+                    console.log(i);
+                    console.log(secondArray);
+                }
+            }
+            
+              
+    }
+   
+    //Comprobación extra en caso de que el reordenamiento anterior cause otro cruce de equipos del mismo grupo
+    
+    const localGroups = [];
+    const visitorGroups =[];
+    
+   
+    for (let i=0; i < firstArray.length; i++){       
+    localGroups.push(firstArray[i].group);
+    visitorGroups.push(secondArray[i].group);
+    }
 
+    console.log(localGroups, visitorGroups);
+    const sameGroup = (group,i) => {return group ===localGroups[i]};
 
+    if (visitorGroups.some(sameGroup)){
+
+        console.log('siguen cruzándose');
+        return avoidSameGroup(firstArray, secondArray);
+        
+    }
+
+    else{
+        return secondArray;
+    }
+    
+}
 
 
 
