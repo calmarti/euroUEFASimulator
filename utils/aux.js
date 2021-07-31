@@ -39,14 +39,14 @@ export const playRound = function(arrayOfMatches,matchId){
         let localGoals = scoreGoals();
         let visitorGoals = scoreGoals();
         let roundWinner = playMatch(local, visitor, localGoals, visitorGoals);
-        console.log(`${matchId}${i+1}: ${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${roundWinner  || 'No winner yet!'}`);
+        console.log(`\n${matchId}${i+1}: ${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${roundWinner  || 'No winner yet!'}\n`);
 
         while (roundWinner ===undefined){
             console.log('A rematch will be played!');
             localGoals = scoreGoals();
             visitorGoals = scoreGoals();
             roundWinner = playMatch(local,visitor, localGoals, visitorGoals);
-            console.log(`${matchId}${i+1}: ${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${roundWinner  || 'No winner yet!'}`);
+            console.log(`\n${matchId}${i+1}: ${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${roundWinner  || 'No winner yet!'}\n`);
         }
         roundWinners.push(roundWinner);
     }
@@ -132,29 +132,24 @@ export const avoidSameGroup = function(firstArray, secondArray){
        
        
             if (firstArray[i].group !== secondArray[i].group){
-                console.log(firstArray[i].group);
-           
-                console.log(i);
-
+               
+            
             } 
              
             else{
-                console.log('same group');
-                console.log(secondArray);
+               
 
                 if (i==0){
                     let swappedTeam = secondArray.splice(i,1)[0];
                     secondArray.splice(3,0,swappedTeam);
                    /*  roundOf16.push({local:`${firstArray[i].name}`, visitor:`${secondArray[i].name}`});  */ 
-                    console.log(i);
-                    console.log(secondArray);
+                  
                 }
                 else if (i==1 | i==2 | i==3){
                     let swappedTeam = secondArray.splice(i,1)[0];
                     secondArray.unshift(swappedTeam);
                     /* roundOf16.push({local:`${firstArray[i].name}`, visitor:`${secondArray[i].name}`}); */
-                    console.log(i);
-                    console.log(secondArray);
+                 
                 }
             }
             

@@ -1,5 +1,5 @@
-import Group from './Group.js';
-import teamPool from './utils/teamPool.js'
+import Group from './classes/Group.js';
+import teamPool from './teamPool.js'
 import { nthPlaces } from './utils/aux.js';
 import { sortTeams } from './utils/aux.js';
 import { sortAndSlice } from './utils/aux.js';
@@ -67,7 +67,7 @@ showTournamentSchedule(groups);
 
 
 
-console.log(`================================
+console.log(`\n\n================================
 ======THE EUROCUP STARTS!======\n================================\n`);
 
 //Mostrar el resultado de cada jornada grupo por grupo
@@ -75,12 +75,12 @@ console.log(`================================
 
 for (let i = 0; i < 3; i++) {    
 
-    console.log(`=== Matchday ${i + 1}===`);
+    console.log(`\n=== Matchday ${i + 1}===\n`);
 
     for (let group of groups) {
-        console.log(`Group ${group.name}`);
-        console.log(group.playMatchDay(i, 0));
-        console.log(group.playMatchDay(i, 1));
+        console.log(`\nGroup ${group.name}\n`);
+        console.log(group.playMatchDay(i, 0), '\n');
+        console.log(group.playMatchDay(i, 1), '\n');
         group.showMatchDayResults();
 
     }
@@ -90,8 +90,6 @@ for (let i = 0; i < 3; i++) {
 
 //Primeros de grupo
 const firstPlaces = nthPlaces(groups, 0);
-
-console.log('Primeros', firstPlaces);
 
 //Terceros de grupo
 const thirdPlaces = nthPlaces(groups, 2);
@@ -109,13 +107,13 @@ const secondPlacesFromNoBestThirdPlaceGroup = splitSecondPlaces('fromNoBestThird
 const restOfSecondPlaces = splitSecondPlaces('rest', secondPlaces, bestThirdPlaces, inSameGroup);
 
 
-console.log('Mejores terceros:', bestThirdPlaces);
+
 
 
 
 //Comienza la fase de playoffs
 
-console.log('==========ROUND OF SIXTEEN==========');
+console.log('\n==========ROUND OF SIXTEEN==========\n');
 
 
 const setRoundOf16 = function (firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestThirdPlaces, restOfSecondPlaces) {
@@ -133,7 +131,7 @@ const setRoundOf16 = function (firstPlaces, secondPlacesFromNoBestThirdPlaceGrou
     //Evitar los cruces con equipos del mismo grupo
 
     first4Visitors = avoidSameGroup(first4Locals, first4Visitors);
-    console.log(first4Visitors);
+    
 
     for (let i = 0; i < first4Locals.length; i++) {
         roundOf16.push({ local: `${first4Locals[i].name}`, visitor: `${first4Visitors[i].name}` });
@@ -147,7 +145,7 @@ const setRoundOf16 = function (firstPlaces, secondPlacesFromNoBestThirdPlaceGrou
     //Evitar los cruces con equipos del mismo grupo
 
     last4Visitors = avoidSameGroup(last4Locals, last4Visitors);
-    console.log(last4Visitors);
+    
 
     for (let i = 0; i < last4Locals.length; i++) {
         roundOf16.push({ local: `${last4Locals[i].name}`, visitor: `${last4Visitors[i].name}` });
@@ -167,7 +165,7 @@ const roundOf16Winners = playRound(roundOf16,'Q');
 
 
 
-console.log('==========QUARTER-FINALS==========');
+console.log('\n==========QUARTER-FINALS==========\n');
 
 //Q1 - Q8
 //Q2 - Q7
@@ -199,7 +197,7 @@ const quarterFinalsWinners = playRound(quarterFinals,'QF');
 
 
 
-console.log('==========SEMIFINALS==========');
+console.log('\n==========SEMIFINALS==========\n');
 
 
 
@@ -223,7 +221,7 @@ const setSemiFinals = function(quarterFinalsWinners){
     const semiFinalsWinners = playRound(semiFinals,'SF');
  
 
-console.log('==========THIRD AND FOURTH PLACE==========');
+console.log('\n==========THIRD AND FOURTH PLACE==========\n');
 
 
 //Emparejamientos del partido de tercer y cuarto lugar
@@ -247,14 +245,14 @@ const thirdPlaceMatch = function (thirdAndFourthPlace){
     let localGoals = scoreGoals();
     let visitorGoals = scoreGoals();
     let thirdPlaceWinner = playMatch(local, visitor, localGoals, visitorGoals);
-    console.log(`${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${thirdPlaceWinner  || 'No winner yet!'}`);
+    console.log(`${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${thirdPlaceWinner  || 'No winner yet!'}\n`);
     while(thirdPlaceWinner === undefined){
         
         console.log('A rematch will be played!');
         localGoals = scoreGoals();
         visitorGoals = scoreGoals();
         thirdPlaceWinner = playMatch(local, visitor, localGoals, visitorGoals)
-        console.log(`${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${thirdPlaceWinner  || 'No winner yet!'}`);
+        console.log(`\n${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${thirdPlaceWinner  || 'No winner yet!'}\n`);
     }
 
     return thirdPlaceWinner;
@@ -262,7 +260,7 @@ const thirdPlaceMatch = function (thirdAndFourthPlace){
 const thirdPlaceWinner = thirdPlaceMatch(thirdAndFourthPlace);
 
 
-console.log('==========FINAL==========');
+console.log('\n==========FINAL==========n');
 
 //Los ganadores de las semifinales juegan la final
 
@@ -272,14 +270,14 @@ const final = function(){
     let localGoals = scoreGoals();
     let visitorGoals = scoreGoals();
     let champion = playMatch(local,visitor, localGoals, visitorGoals);
-    console.log(`${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${champion|| 'No winner yet!'}`);
+    console.log(`\n${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${champion|| 'No winner yet!'}\n`);
 
     while (champion  === undefined){
         console.log('A rematch will be played!');
         localGoals = scoreGoals();
         visitorGoals = scoreGoals();
         champion = playMatch(local,visitor, localGoals, visitorGoals);
-        console.log(`${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${champion || 'No winner yet!'}`);
+        console.log(`\n${local} ${localGoals}  -  ${visitorGoals} ${visitor} ==> ${champion || 'No winner yet!'}\n`);
     }
 
     return champion;
@@ -287,8 +285,9 @@ const final = function(){
 
 
 const champion = final(semiFinalsWinners);
-console.log(`======================================`);
+console.log(`\n===========================================\n`);
 console.log(`${champion} is the new Euro Cup Champion!`);
+console.log(`\n===========================================\n`);
 
 
 

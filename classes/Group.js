@@ -1,6 +1,6 @@
-import { sortTeams } from "./utils/aux.js";
-import { scoreGoals } from "./utils/aux.js";
-import { playMatch } from "./utils/aux.js";
+import { sortTeams } from "../utils/aux.js";
+import { scoreGoals } from "../utils/aux.js";
+import { playMatch } from "../utils/aux.js";
 
 export default class Group {
 
