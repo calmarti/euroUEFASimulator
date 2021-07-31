@@ -10,8 +10,7 @@ export default class Group {
         this.setup(config);
         this.setupTeams(teams);
         this.setup(config);
-        this.local = ''
-        this.visitor = ''
+ 
     }
 
     setup(config) {

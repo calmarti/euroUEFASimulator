@@ -1,12 +1,12 @@
 import teamPool from './teamPool.js'
 import Group from './classes/Group.js';
-import { nthPlaces } from './utils/aux.js';
 import { sortTeams } from './utils/aux.js';
-import { sortAndSlice } from './utils/aux.js';
-import { inSameGroup } from './utils/aux.js';
-import { splitSecondPlaces } from './utils/aux.js';
 import { playRound } from './utils/aux.js';
-import { avoidSameGroup } from './utils/aux.js';
+import { nthPlaces } from './utils/auxRoundOf16.js';
+import { sortAndSlice } from './utils/auxRoundOf16.js';
+import { inSameGroup } from './utils/auxRoundOf16.js';
+import { splitSecondPlaces } from './utils/auxRoundOf16.js';
+import { avoidSameGroup } from './utils/auxRoundOf16.js';
 
 
 //Distribución aleatoria de los 24 equipos en 6 grupos de 4 equipos cada uno
