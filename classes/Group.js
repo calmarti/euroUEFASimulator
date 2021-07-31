@@ -97,18 +97,10 @@ export default class Group {
         
         for (let i=0; i < numberOfMatchDays; i++) {
             for (let j=1; j < matchesPerMatchDay; j++) {
-                
-              /*   console.log(i, j, index); */
-  
                     
                     this.schedule[i][j].visitor = teamNames[index];
                     index--;
-                    /*if (index < 0){
-                        console.log(i,j,index);
-                        index = this.teams.length - 2;
-                        console.log(i,j,index);
-                        this.schedule[i][j].visitor = teamNames[index]; 
-                    }   */
+
                 }
             }
                     
