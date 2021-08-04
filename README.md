@@ -80,7 +80,7 @@
     
     splitSecondPlaces (divide los segundos lugares en dos grupos: los que no pertenecen a un grupo donde se clasifico un tercero y el resto de los segundos lugares)
 
-    avoidSameGroup (reordena el array de equipos visitantes ahí donde el grupo original del local sea igual al del visitante)
+    avoidSameGroup (reordena el array de equipos visitantes si ocurre que el grupo original del local es igual al del visitante)
 
 
 
