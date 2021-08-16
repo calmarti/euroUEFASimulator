@@ -117,6 +117,19 @@ const restOfSecondPlaces = splitSecondPlaces('rest', secondPlaces, bestThirdPlac
 
 console.log('\n==========ROUND OF SIXTEEN==========\n');
 
+//Clasificados para los octavos de final
+firstPlaces.forEach(team => {
+    console.log(team.name);
+})
+
+secondPlaces.forEach(team => {
+    console.log(team.name);
+})
+
+bestThirdPlaces.forEach(team => {
+    console.log(team.name);
+})
+
 
 const setRoundOf16 = function (firstPlaces, secondPlacesFromNoBestThirdPlaceGroup, bestThirdPlaces, restOfSecondPlaces) {
     const roundOf16 = [];
